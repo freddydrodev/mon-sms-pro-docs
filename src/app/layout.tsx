@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 const banner = (
   <Banner storageKey="banner" dismissible={false}>
-    Vous êtes sur la version <b>Beta</b> de Mon SMS PRO SDK 🎉
+    Votre documentation est en cours de développement.
   </Banner>
 );
 

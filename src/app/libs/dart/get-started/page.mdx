@@ -1,0 +1,94 @@
+---
+title: Premier pas
+---
+
+## Débuter avec Dart
+
+Si vous travaillez avec le framework Flutter ou Dart vous pouvez installer [notre bibliothèque](https://pub.dev/packages/mon_sms_pro) ou utiliser la commande ci-dessous dans votre projet.
+
+```sh copy
+flutter pub add mon_sms_pro
+```
+
+ou
+
+```sh copy
+dart pub add mon_sms_pro
+```
+
+## Securité
+
+Pour des raisons de sécurité, il est utile d'installer le package [flutter_dotenv](https://pub.dev/packages/flutter_dotenv).
+
+```bash
+flutter pub add flutter_dotenv
+```
+
+Après l'installation, vous devez créer un fichier `.env` à la racine de votre projet Flutter.
+
+```bash
+touch .env
+```
+
+Ajoutez les lignes suivantes au fichier `.env`, en remplacant `your_api_key` par votre [clé API](/#api-key).
+
+```dart filename=".env"
+API_KEY="your_api_key"
+```
+
+importez les variables d'environnement dans votre fonction main:
+
+```dart copy showLineNumbers filename="lib/main.dart" {2,6}
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
+void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await dotenv.load(fileName: ".env");
+    runApp(const MyApp());
+}
+```
+
+## Initialisation
+
+Créez une instance de la classe MonSMSPRO dans un fichier de votre choix afin de la réutiliser.
+
+```dart copy filename="lib/utils/sms.dart"
+import 'package:mon_sms_pro/mon_sms_pro.dart';
+
+final sms = MonSMSPRO(apiKey: dotenv.env['API_KEY'] ?? "");
+```
+
+## Sauvegarde Locale avec [HiveDB](https://pub.dev/packages/hive)
+
+Si vous voulez utiliser Hive pour stoquer les messages au locale, utilisez l'une des commande suivantes.:
+
+Avec Dart:
+
+```sh copy
+dart pub add hive
+```
+
+Avec Flutter:
+
+```sh copy
+flutter pub add hive
+```
+
+Utilisez ensuite la fonction `initHiveAdapters` dans la fonction `main` de votre projet:
+
+```dart showLineNumbers copy filename="lib/main.dart" {3-4,8-9,11}
+import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mon_sms_pro/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+
+void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Hive.initFlutter();
+    await initHiveAdapters();
+    await dotenv.load(fileName: ".env");
+    await Hive.openBox(dotenv.env['LOCAL_DB_NAME']!);
+    runApp(const MyApp());
+}
+```
