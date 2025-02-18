@@ -1,0 +1,112 @@
+---
+title: Messages
+---
+
+import { Callout, Table } from "nextra/components";
+
+## Introduction
+
+Les messages SMS utilisent le service de messagerie courte pour la transmission, avec une limite de caractères basée sur l'encodage. L'alphabet GSM-7 permet 160 caractères, tandis que l'encodage UCS-2 limite à 70 caractères en raison des caractères spéciaux. Les messages dépassant ces limites sont segmentés, chaque segment réduisant le nombre de caractères disponibles à 153 pour GSM-7. Surveiller la longueur des messages est crucial pour éviter des coûts supplémentaires.
+
+<Callout type="warning" emoji="⚠️">
+  N'oubliez pas de mettre l'index du pays sans le **(+)** avant le numéro du
+  destinataire.
+</Callout>
+
+## Utilisation
+
+Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
+vous pouvez utiliser la propriété `campain` de votre variable.
+
+```ts filename="/api/campain" showLineNumbers {1,6-10}
+import { sms } from "@/libs/sms";
+
+const createCampain = async () => {
+  try {
+    // Create a new campaign with specified contacts, message text, and sender ID
+    const res = await sms.campain.create({
+      contacts: [{ phone: "22500000000" }, { phone: "2250101010101" }],
+      text: "Bonjour @nom_complet bon début de semaine.",
+      senderId: "My Sender",
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+## Propriétés
+
+### sms.campain.create
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>contacts</Table.Td>
+      <Table.Td>Array de numéros de téléphone du destinataire</Table.Td>
+      <Table.Td>Array de Contact Object</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{[]}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>text</Table.Td>
+      <Table.Td>Texte du message</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>senderId</Table.Td>
+      <Table.Td>Identifiant du nom de l'expéditeur</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>groupsIds</Table.Td>
+      <Table.Td>Array d'identifiants de groupes</Table.Td>
+      <Table.Td>Array de Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>[]</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>type</Table.Td>
+      <Table.Td>Type de message</Table.Td>
+      <Table.Td>"SMS", "FLASH"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>SMS</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>forceSenderId</Table.Td>
+      <Table.Td>
+        Si vous devez utiliser un nom de l'expéditeur dans le message lorsqu'il n'est pas encore validé par les opérateurs.
+      </Table.Td>
+      <Table.Td>Boolean</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>false</Table.Td>
+    </Table.Tr>
+
+  </tbody>
+</Table>
+
+L'objet `Contact` a la structure suivante:
+
+```ts
+type Contact = {
+  phone: string;
+  firstName?: string;
+  lastName?: string;
+  sex: "M" | "F";
+};
+```

@@ -16,11 +16,12 @@ vérification des numéros d'un utilisateur, ou pour une double authentification
 Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
 vous pouvez utiliser la propriété `otp` pour envoyer et vérifier les codes.
 
-```ts filename="/api/otp" showLineNumbers {1,5,15-19}
+```ts filename="/api/otp" showLineNumbers {1,6,17-21}
 import { sms } from "@/libs/sms";
 
 const sendOtp = async () => {
   try {
+    // Send the OTP code to the phone number
     const res = await sms.otp.get({ phoneNumber: "22500000000" });
 
     console.log(res);
@@ -31,6 +32,7 @@ const sendOtp = async () => {
 
 const verifyOtp = async () => {
   try {
+    // Verify the OTP code using the phone number, OTP code, and token
     const res = await sms.otp.verify({
       phoneNumber: "22500000000",
       otp: "1234",
@@ -51,6 +53,8 @@ précédemment pour envoyer et vérifier le code d'authentification à travers
 ## Propriétés
 
 ### sms.otp.get
+
+Permet d'envoyer un code d'authentification (OTP) par SMS au numéro de téléphone du destinataire.
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -102,6 +106,8 @@ précédemment pour envoyer et vérifier le code d'authentification à travers
 </Table>
 
 ### sms.otp.verify
+
+Permet de vérifier un code d'authentification (OTP) envoyé par SMS.
 
 <Table style={{ marginTop: 20 }}>
   <thead>

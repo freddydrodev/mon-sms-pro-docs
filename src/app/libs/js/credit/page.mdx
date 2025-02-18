@@ -1,8 +1,8 @@
 ---
-title: Nom d'Expéditeur
+title: Crédits
 ---
 
-import { Table } from "nextra/components";
+import { Callout, Table } from "nextra/components";
 
 ## Introduction
 
@@ -15,12 +15,11 @@ Il utilise uniquement des caractères alphanumériques et est limité à 11 cara
 Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
 vous pouvez utiliser la propriété `sender` de votre variable.
 
-```ts filename="/api/sender" showLineNumbers {1,6-9,20,31-33}
+```ts filename="/api/sender" showLineNumbers {1,5-8,18,28-30}
 import { sms } from "@/libs/sms";
 
 const createSender = async () => {
   try {
-    // Crée un nouveau nom d'expéditeur
     const res = await sms.sender.create({
       name: "My Sender",
       description: "This is the name of my marque",
@@ -34,7 +33,6 @@ const createSender = async () => {
 
 const getSenders = async () => {
   try {
-    // Récupère la liste des noms d'expéditeurs existants
     const res = await sms.sender.list();
 
     console.log(res);
@@ -45,7 +43,6 @@ const getSenders = async () => {
 
 const getSenderCampain = async () => {
   try {
-    // Récupère la liste des campagnes du nom d'expéditeur par son id
     const res = await sms.sender.campains({
       id: "id_of_the_sender",
     });
@@ -64,8 +61,6 @@ précédemment pour envoyer et vérifier le code d'authentification à travers
 ## Propriétés
 
 ### sms.sender.create
-
-Crée un nouveau nom d'expéditeur.
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -86,7 +81,7 @@ Crée un nouveau nom d'expéditeur.
       <Table.Td>{""}</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>description</Table.Td>
+      <Table.Td>desciption</Table.Td>
       <Table.Td>
         C'est la description fournie aux opérateurs téléphoniques afin de
         valider le nom de l'expéditeur utilisé.
@@ -99,8 +94,6 @@ Crée un nouveau nom d'expéditeur.
 </Table>
 
 ### sms.sender.campains
-
-Récupère la liste des campagnes du nom d'expéditeur par son id.
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -128,5 +121,4 @@ Récupère la liste des campagnes du nom d'expéditeur par son id.
 
 ### sms.sender.list
 
-Récupère la liste de tous les noms d'expéditeurs.<br />
-_Cette méthode ne recoit aucun argument._
+Cette méthode ne recoit aucun argument.
