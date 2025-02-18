@@ -2,10 +2,43 @@
 title: Premier pas
 ---
 
-# Débuter avec la bibliothèque JavaScript
+import { Callout } from "nextra/components";
+
+## Débuter avec JavaScript
 
 Afin de Débuter avec notre bibliothèque Javascript dans votre projet Node.js / Next.js / etc... Il vous suffir d'utiliser le package manager de votre choix.
 
 ```sh npm2yarn copy
 npm i @freddydrodev/monsmspro
+```
+
+## Securité
+
+Pour des raisons de sécurité, il est utile d'installer le package [dotenv](https://www.npmjs.com/package/dotenv). Privilégiez surtout l'utilisation du côté serveur plutôt que du côté client.
+
+<Callout type="info">
+  Je tiens à souligner que certains frameworks tels que Next.js intègrent déjà
+  ce package.
+</Callout>
+
+Après l'installation, vous devez créer un fichier `.env` à la racine de votre projet.
+
+```bash
+touch .env
+```
+
+Ajoutez les lignes suivantes au fichier `.env`, en remplacant `your_api_key` par votre [clé API](/#api-key).
+
+```dart filename=".env"
+API_KEY="your_api_key"
+```
+
+## Initialisation[#init]
+
+Créez une instance de la classe MonSMSPRO dans un fichier de votre choix afin de la réutiliser.
+
+```ts copy filename="./libs/sms.ts"
+import { MonSMSPRO } from "@freddydrodev/monsmspro";
+
+export const sms = MonSMSPRO(process.env["API_KEY"] ?? "");
 ```

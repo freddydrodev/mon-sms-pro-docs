@@ -1,0 +1,139 @@
+---
+title: One Time Password
+---
+
+import { Callout, Table } from "nextra/components";
+
+## Introduction
+
+One Time Password (OTP) est une méthode de connexion qui permet à l'utilisateur de se
+connecter depuis son numéro de téléphone en recevant un code par SMS qu'il doit saisir afin de
+confirmer son identité. Cette technique est souvent utilisée pour éviter les erreurs lors de la
+vérification des numéros d'un utilisateur, ou pour une double authentification.
+
+## Utilisation
+
+Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
+vous pouvez utiliser la propriété `otp` pour envoyer et vérifier les codes.
+
+```ts filename="/api/otp" showLineNumbers {1,5,15-19}
+import { sms } from "@/libs/sms";
+
+const sendOtp = async () => {
+  try {
+    const res = await sms.otp.get({ phoneNumber: "22500000000" });
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const verifyOtp = async () => {
+  try {
+    const res = await sms.otp.verify({
+      phoneNumber: "22500000000",
+      otp: "1234",
+      token: "returned_token_from_sendOTP",
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+Comme vous pouvez le constater nous avons utilisé la variable `sms` créée
+précédemment pour envoyer et vérifier le code d'authentification à travers
+2 fonctions distinctes représentant ici 2 API.
+
+## Propriétés
+
+### sms.otp.get
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>phoneNumber</Table.Td>
+      <Table.Td>Numéro de Téléphone du destinataire</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>length</Table.Td>
+      <Table.Td>Longueur du code entre 4 et 8 chiffres</Table.Td>
+      <Table.Td>Nombre</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>4</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>mode</Table.Td>
+      <Table.Td>Mode d'envoi du code</Table.Td>
+      <Table.Td>"NUMERIC", "ALPHABET", "ALPHA_NUMERIC"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>NUMERIC</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>senderId</Table.Td>
+      <Table.Td>Identifiant de l'expéditeur</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>appName</Table.Td>
+      <Table.Td>Nom de votre application a ecrire dans le SMS</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### sms.otp.verify
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>token</Table.Td>
+      <Table.Td>Jeton retourné pour validation</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>otp</Table.Td>
+      <Table.Td>Code de vérification envoyé</Table.Td>
+      <Table.Td>Nombre</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>phoneNumber</Table.Td>
+      <Table.Td>Numéro de Téléphone du destinataire</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
