@@ -6,46 +6,25 @@ import { Callout, Table } from "nextra/components";
 
 ## Introduction
 
-Le nom de l'expéditeur **(senderId)** est le nom utilisé pour identifier l'expéditeur du SMS.
-Il peut représenter votre marque, votre entreprise, etc...
-Il utilise uniquement des caractères alphanumériques et est limité à 11 caractères maximum.
+Les crédits représentent le solde disponible sur votre compte pour envoyer des SMS. Chaque message envoyé déduit un certain montant de votre solde en fonction des tarifs appliqués. Il est important de surveiller votre balance de crédits pour vous assurer que votre compte dispose de suffisamment de fonds pour les opérations prévues.
+
+<Callout type="info" emoji="ℹ️">
+  Assurez-vous de recharger votre compte avant que votre solde ne soit épuisé
+  pour éviter toute interruption de service. 1 crédit vaut en moyen $0.04 soit
+  25F CFA. Les Message Flash utilise plus de crédits que les SMS.
+</Callout>
 
 ## Utilisation
 
 Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
-vous pouvez utiliser la propriété `sender` de votre variable.
+vous pouvez utiliser la propriété `user` de votre variable.
 
-```ts filename="/api/sender" showLineNumbers {1,5-8,18,28-30}
+```ts filename="/api/credit" showLineNumbers {1,5}
 import { sms } from "@/libs/sms";
 
-const createSender = async () => {
+const getCredit = async () => {
   try {
-    const res = await sms.sender.create({
-      name: "My Sender",
-      description: "This is the name of my marque",
-    });
-
-    console.log(res);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getSenders = async () => {
-  try {
-    const res = await sms.sender.list();
-
-    console.log(res);
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const getSenderCampain = async () => {
-  try {
-    const res = await sms.sender.campains({
-      id: "id_of_the_sender",
-    });
+    const res = await sms.user.credit();
 
     console.log(res);
   } catch (error) {
@@ -54,71 +33,8 @@ const getSenderCampain = async () => {
 };
 ```
 
-Comme vous pouvez le constater nous avons utilisé la variable `sms` créée
-précédemment pour envoyer et vérifier le code d'authentification à travers
-3 fonctions distinctes représentant ici 3 API.
-
 ## Propriétés
 
-### sms.sender.create
-
-<Table style={{ marginTop: 20 }}>
-  <thead>
-    <Table.Tr>
-      <Table.Th>Nom</Table.Th>
-      <Table.Th>Description</Table.Th>
-      <Table.Th>Type</Table.Th>
-      <Table.Th>Facultatif</Table.Th>
-      <Table.Th>Valeur par défaut</Table.Th>
-    </Table.Tr>
-  </thead>
-  <tbody>
-    <Table.Tr>
-      <Table.Td>name</Table.Td>
-      <Table.Td>Nom de l'expéditeur entre 3 et 11 caractères</Table.Td>
-      <Table.Td>Texte</Table.Td>
-      <Table.Td>Non</Table.Td>
-      <Table.Td>{""}</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>desciption</Table.Td>
-      <Table.Td>
-        C'est la description fournie aux opérateurs téléphoniques afin de
-        valider le nom de l'expéditeur utilisé.
-      </Table.Td>
-      <Table.Td>Texte</Table.Td>
-      <Table.Td>Non</Table.Td>
-      <Table.Td>{""}</Table.Td>
-    </Table.Tr>
-  </tbody>
-</Table>
-
-### sms.sender.campains
-
-<Table style={{ marginTop: 20 }}>
-  <thead>
-    <Table.Tr>
-      <Table.Th>Nom</Table.Th>
-      <Table.Th>Description</Table.Th>
-      <Table.Th>Type</Table.Th>
-      <Table.Th>Facultatif</Table.Th>
-      <Table.Th>Valeur par défaut</Table.Th>
-    </Table.Tr>
-  </thead>
-  <tbody>
-    <Table.Tr>
-      <Table.Td>id</Table.Td>
-      <Table.Td>
-        Identifiant unique du nom d'expéditeur. vous pouvez l'obtenir grace à la
-        méthode `sms.sender.list`, c'est la clé `id` de chaque senderId.
-      </Table.Td>
-      <Table.Td>Texte</Table.Td>
-      <Table.Td>Non</Table.Td>
-      <Table.Td>{""}</Table.Td>
-    </Table.Tr>
-  </tbody>
-</Table>
-
-### sms.sender.list
+### sms.user.credit
 
 Cette méthode ne recoit aucun argument.

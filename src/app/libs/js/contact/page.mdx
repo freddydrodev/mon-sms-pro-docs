@@ -4,25 +4,39 @@ title: Contacts
 
 import { Callout, Table } from "nextra/components";
 
-## Introduction
+## Introduction[#intro]
 
-Le nom de l'expéditeur **(senderId)** est le nom utilisé pour identifier l'expéditeur du SMS.
-Il peut représenter votre marque, votre entreprise, etc...
-Il utilise uniquement des caractères alphanumériques et est limité à 11 caractères maximum.
+Les contacts sont des numéros de téléphone qui sont enregistrés dans votre compte et qui peuvent être utilisés pour envoyer des SMS.
+
+<Callout type="warning" emoji="⚠️">
+  N'oubliez pas de mettre l'index du pays sans le **(+)** avant le numéro du
+  contact.
+</Callout>
+
+L'objet Contact a la structure suivante:
+
+```ts
+type Contact = {
+  phone: string;
+  name?: string;
+  firstName?: string;
+  lastName?: string;
+  sex: "M" | "F";
+};
+```
 
 ## Utilisation
 
 Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
-vous pouvez utiliser la propriété `sender` de votre variable.
+vous pouvez utiliser la propriété `contact` de votre variable.
 
-```ts filename="/api/sender" showLineNumbers {1,5-8,18,28-30}
+```ts filename="/api/contact" showLineNumbers {1,5-7,17,27-29,39-42}
 import { sms } from "@/libs/sms";
 
-const createSender = async () => {
+const createContact = async () => {
   try {
-    const res = await sms.sender.create({
-      name: "My Sender",
-      description: "This is the name of my marque",
+    const res = await sms.contact.create({
+      contacts: [{ phone: "22500000000" }, { phone: "2250101010101" }],
     });
 
     console.log(res);
@@ -31,9 +45,9 @@ const createSender = async () => {
   }
 };
 
-const getSenders = async () => {
+const listContacts = async () => {
   try {
-    const res = await sms.sender.list();
+    const res = await sms.contact.list();
 
     console.log(res);
   } catch (error) {
@@ -41,10 +55,23 @@ const getSenders = async () => {
   }
 };
 
-const getSenderCampain = async () => {
+const deleteContact = async () => {
   try {
-    const res = await sms.sender.campains({
-      id: "id_of_the_sender",
+    const res = await sms.contact.delete({
+      contactIds: ["contact_id_1", "contact_id_2"],
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const updateContact = async () => {
+  try {
+    const res = await sms.contact.update({
+      id: "id_of_the_contact",
+      phone: "2250000000000",
     });
 
     console.log(res);
@@ -54,13 +81,9 @@ const getSenderCampain = async () => {
 };
 ```
 
-Comme vous pouvez le constater nous avons utilisé la variable `sms` créée
-précédemment pour envoyer et vérifier le code d'authentification à travers
-3 fonctions distinctes représentant ici 3 API.
-
 ## Propriétés
 
-### sms.sender.create
+### sms.contact.create
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -74,26 +97,66 @@ précédemment pour envoyer et vérifier le code d'authentification à travers
   </thead>
   <tbody>
     <Table.Tr>
-      <Table.Td>name</Table.Td>
-      <Table.Td>Nom de l'expéditeur entre 3 et 11 caractères</Table.Td>
+      <Table.Td>phone</Table.Td>
+      <Table.Td>Numéro de téléphone du contact</Table.Td>
       <Table.Td>Texte</Table.Td>
       <Table.Td>Non</Table.Td>
       <Table.Td>{""}</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>desciption</Table.Td>
-      <Table.Td>
-        C'est la description fournie aux opérateurs téléphoniques afin de
-        valider le nom de l'expéditeur utilisé.
-      </Table.Td>
+      <Table.Td>name</Table.Td>
+      <Table.Td>Nom complet du contact</Table.Td>
       <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>firstName</Table.Td>
+      <Table.Td>Prénom du contact</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>lastName</Table.Td>
+      <Table.Td>Nom de famille du contact</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>sex</Table.Td>
+      <Table.Td>Sexe du contact</Table.Td>
+      <Table.Td>"M", "F"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>M</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### sms.contact.delete
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>contactIds</Table.Td>
+      <Table.Td>Array d'identifiants des contacts</Table.Td>
+      <Table.Td>Array de Texte</Table.Td>
       <Table.Td>Non</Table.Td>
       <Table.Td>{""}</Table.Td>
     </Table.Tr>
   </tbody>
 </Table>
-
-### sms.sender.campains
+### sms.contact.update
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -108,17 +171,48 @@ précédemment pour envoyer et vérifier le code d'authentification à travers
   <tbody>
     <Table.Tr>
       <Table.Td>id</Table.Td>
-      <Table.Td>
-        Identifiant unique du nom d'expéditeur. vous pouvez l'obtenir grace à la
-        méthode `sms.sender.list`, c'est la clé `id` de chaque senderId.
-      </Table.Td>
+      <Table.Td>Identifiant du contact</Table.Td>
       <Table.Td>Texte</Table.Td>
       <Table.Td>Non</Table.Td>
       <Table.Td>{""}</Table.Td>
     </Table.Tr>
+    <Table.Tr>
+      <Table.Td>name</Table.Td>
+      <Table.Td>Nom du contact</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>firstName</Table.Td>
+      <Table.Td>Prénom du contact</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>lastName</Table.Td>
+      <Table.Td>Nom de famille du contact</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>phone</Table.Td>
+      <Table.Td>Numéro de téléphone du contact</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>sex</Table.Td>
+      <Table.Td>Sexe du contact</Table.Td>
+      <Table.Td>"M", "F"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>M</Table.Td>
+    </Table.Tr>
   </tbody>
 </Table>
-
-### sms.sender.list
+### sms.contact.list
 
 Cette méthode ne recoit aucun argument.
