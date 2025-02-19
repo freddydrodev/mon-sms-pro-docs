@@ -63,6 +63,7 @@ Créez une instance de la classe MonSMSPRO dans un fichier de votre choix afin d
 
 ```dart copy filename="lib/utils/sms.dart"
 import 'package:mon_sms_pro/mon_sms_pro.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 final sms = MonSMSPRO(apiKey: dotenv.env['API_KEY'] ?? "");
 ```
