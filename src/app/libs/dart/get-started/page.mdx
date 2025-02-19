@@ -20,25 +20,33 @@ dart pub add mon_sms_pro
 
 Pour des raisons de sécurité, il est utile d'installer le package [flutter_dotenv](https://pub.dev/packages/flutter_dotenv).
 
-```bash
+```bash copy
 flutter pub add flutter_dotenv
 ```
 
 Après l'installation, vous devez créer un fichier `.env` à la racine de votre projet Flutter.
 
-```bash
+```bash copy
 touch .env
 ```
 
 Ajoutez les lignes suivantes au fichier `.env`, en remplacant `your_api_key` par votre [clé API](/#api-key).
 
-```dart filename=".env"
+```dart filename=".env" copy
 API_KEY="your_api_key"
+```
+
+Add the .env file to your assets bundle in pubspec.yaml. Ensure that the path corresponds to the location of the .env file!
+
+```yaml filename="pubspec.yaml" copy
+flutter:
+  assets:
+    - .env
 ```
 
 importez les variables d'environnement dans votre fonction main:
 
-```dart copy showLineNumbers filename="lib/main.dart" {2,6}
+```dart showLineNumbers filename="lib/main.dart" {2,6}
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -77,7 +85,7 @@ flutter pub add hive
 
 Utilisez ensuite la fonction `initHiveAdapters` dans la fonction `main` de votre projet:
 
-```dart showLineNumbers copy filename="lib/main.dart" {3-4,8-9,11}
+```dart showLineNumbers filename="lib/main.dart" {3-4,8-9,11}
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mon_sms_pro/hive.dart';
