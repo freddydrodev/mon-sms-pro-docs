@@ -1,0 +1,425 @@
+---
+description:
+globs:
+alwaysApply: true
+---
+---
+description: Rest API structure and Endpoints
+globs:
+alwaysApply: true
+---
+
+# API Endpoints Documentation
+
+## Campaign Endpoints
+
+| Path                     | Method | Schema                    | Description                 |
+| ------------------------ | ------ | ------------------------- | --------------------------- |
+| `/v1/campaign/create`    | POST   | `campaignCreateSchema`    | Create a new campaign       |
+| `/v1/campaign/list`      | POST   | `campaignListSchema`      | List all campaigns          |
+| `/v1/campaign/scheduled` | POST   | `scheduledCampaignSchema` | Create a scheduled campaign |
+| `/v1/campaign/recurring` | POST   | `recurringCampaignSchema` | Create a recurring campaign |
+
+### Campaign Validation Schemas
+
+#### campaignCreateSchema
+
+```typescript
+{
+  name?: string;
+  contacts: Array<{
+    id: string;
+    phone: string;
+    name: string;
+    firstName?: string;
+    lastName?: string;
+    nom_complet?: string;
+    prenom?: string;
+    nom_de_famille?: string;
+    sex?: "M" | "F";
+  }>;
+  groupsIds: string[];
+  text: string;
+  senderId?: string;
+  type?: "SMS" | "FLASH" | "SCHEDULED" | "RECURRING";
+  scheduledDate?: Date;
+  recurring?: {
+    monday?: Date;
+    tuesday?: Date;
+    wednesday?: Date;
+    thursday?: Date;
+    friday?: Date;
+    saturday?: Date;
+    sunday?: Date;
+  };
+}
+```
+
+#### campaignListSchema
+
+```typescript
+{
+  orderBy?: "firstName" | "lastName" | "phone" | "createdAt";
+  page?: number;
+  limit?: number;
+}
+```
+
+#### scheduledCampaignSchema
+
+```typescript
+{
+  name?: string;
+  contacts: Array<{
+    id: string;
+    phone: string;
+    name: string;
+    firstName?: string;
+    lastName?: string;
+    nom_complet?: string;
+    prenom?: string;
+    nom_de_famille?: string;
+    sex?: "M" | "F";
+  }>;
+  groupsIds: string[];
+  text: string;
+  senderId?: string;
+  type: "SCHEDULED";
+  scheduledDate: Date;
+}
+```
+
+#### recurringCampaignSchema
+
+```typescript
+{
+  name?: string;
+  contacts: Array<{
+    id: string;
+    phone: string;
+    name: string;
+    firstName?: string;
+    lastName?: string;
+    nom_complet?: string;
+    prenom?: string;
+    nom_de_famille?: string;
+    sex?: "M" | "F";
+  }>;
+  groupsIds: string[];
+  text: string;
+  senderId?: string;
+  type: "RECURRING";
+  recurring: {
+    monday?: Date;
+    tuesday?: Date;
+    wednesday?: Date;
+    thursday?: Date;
+    friday?: Date;
+    saturday?: Date;
+    sunday?: Date;
+  };
+}
+```
+
+## Contact Endpoints
+
+| Path                 | Method | Schema                | Description               |
+| -------------------- | ------ | --------------------- | ------------------------- |
+| `/v1/contact/create` | POST   | `contactCreateSchema` | Create a new contact      |
+| `/v1/contact/list`   | POST   | `contactListSchema`   | List all contacts         |
+| `/v1/contact/delete` | POST   | `contactDeleteSchema` | Delete a contact          |
+| `/v1/contact/[id]`   | POST   | `contactIdSchema`     | Get contact details by ID |
+
+### Contact Validation Schemas
+
+#### contactCreateSchema
+
+```typescript
+{
+  phone: string;
+  name: string;
+  firstName?: string;
+  lastName?: string;
+  nom_complet?: string;
+  prenom?: string;
+  nom_de_famille?: string;
+  sex?: "M" | "F";
+}
+```
+
+#### contactListSchema
+
+```typescript
+{
+  orderBy?: "firstName" | "lastName" | "phone" | "createdAt";
+  page?: number;
+  limit?: number;
+}
+```
+emaontcont
+{
+  id: string;
+}
+```
+
+## Group Endpoints
+
+| Path               | Method | Schema              | Description             |
+| ------------------ | ------ | ------------------- | ----------------------- |
+| `/v1/group/create` | POST   | `groupCreateSchema` | Create a new group      |
+| `/v1/group/list`   | POST   | `groupListSchema`   | List all groups         |
+| `/v1/group/[id]`   | POST   | `groupIdSchema`     | Get group details by ID |
+
+### Group Validation Schemas
+
+#### groupCreateSchema
+
+```typescript
+{
+  name: string;
+  description?: string;
+  contacts: Array<{
+    id: string;
+    phone: string;
+    name: string;
+    firstName?: string;
+    lastName?: string;
+    nom_complet?: string;
+    prenom?: string;
+    nom_de_famille?: string;
+    sex?: "M" | "F";
+  }>;
+}
+```
+
+#### groupListSchema
+
+```typescript
+{
+  orderBy?: "name" | "createdAt";
+  page?: number;
+  limit?: number;
+}
+```
+
+#### groupIdSchema
+
+```typescript
+{
+  id: string;
+}
+```
+
+## Sender Endpoints
+
+| Path                | Method | Schema               | Description              |
+| ------------------- | ------ | -------------------- | ------------------------ |
+| `/v1/sender/create` | POST   | `senderCreateSchema` | Create a new sender ID   |
+| `/v1/sender/list`   | POST   | `senderListSchema`   | List all sender IDs      |
+| `/v1/sender/[id]`   | POST   | `senderIdSchema`     | Get sender details by ID |
+
+### Sender Validation Schemas
+
+#### senderCreateSchema
+
+```typescript
+{
+  name: string; // 3-11 characters
+  description: string;
+}
+```
+
+#### senderListSchema
+
+```typescript
+{
+  orderBy?: "name" | "createdAt";
+  page?: number;
+  limit?: number;
+}
+```
+
+#### senderIdSchema
+
+```typescript
+{
+  id: string;
+}
+```
+
+#### updateSenderSchema
+
+```typescript
+{
+  archived?: boolean;
+  status?: "PENDING" | "SUBMITED" | "ACCEPTED" | "REFUSED";
+}
+```
+
+## Template Endpoints
+
+| Path                  | Method | Schema                 | Description                   |
+| --------------------- | ------ | ---------------------- | ----------------------------- |
+| `/v1/template/create` | POST   | `templateCreateSchema` | Create a new message template |
+| `/v1/template/list`   | POST   | `templateListSchema`   | List all message templates    |
+| `/v1/template/delete` | POST   | `templateDeleteSchema` | Delete a message template     |
+
+### Template Validation Schemas
+
+#### templateCreateSchema
+
+```typescript
+{
+  text: string;
+}
+```
+
+#### templateListSchema
+
+```typescript
+{
+  orderBy?: "text" | "createdAt";
+  page?: number;
+  limit?: number;
+}
+```
+
+#### templateDeleteSchema
+
+```typescript
+{
+  id: string;
+}
+```
+
+## Transaction Endpoints
+
+| Path                       | Method | Schema                      | Description                    |
+| -------------------------- | ------ | --------------------------- | ------------------------------ |
+| `/v1/transaction/list`     | POST   | `transactionListSchema`     | List all transactions          |
+| `/v1/transaction/[id]`     | POST   | `transactionIdSchema`       | Get transaction details by ID  |
+| `/v1/transaction/pay`      | POST   | `transactionPaySchema`      | Process a payment transaction  |
+| `/v1/transaction/recharge` | POST   | `transactionRechargeSchema` | Process a recharge transaction |
+
+### Transaction Validation Schemas
+
+#### transactionListSchema
+
+```typescript
+{
+  orderBy?: "amount" | "createdAt";
+  page?: number;
+  limit?: number;
+}
+```
+
+#### transactionIdSchema
+
+```typescript
+{
+  id: string;
+}
+```
+
+#### transactionPaySchema
+
+```typescript
+{
+  amount: number;
+  phone: string;
+  name: string;
+  email: string;
+  paymentMethod: "OM_CI" | "MTN_CI" | "MOOV_CI";
+  app?: "MONSMSPRO" | "XORAIA" | "FREE";
+  otp?: string; // 4 characters
+  offerId: string;
+  credit: number;
+}
+```
+
+#### transactionRechargeSchema
+
+```typescript
+{
+  token: string;
+  paymentMethod: "OM_CI" | "MTN_CI" | "MOOV_CI" | "IAP" | "CASH";
+  type?: "DEBITED" | "RECHARGED";
+  status?: "PENDING" | "FAILED" | "CHARGED";
+  offerId: string;
+  credit: number;
+}
+```
+
+## User Endpoints
+
+| Path                         | Method | Schema                      | Description                                       |
+| ---------------------------- | ------ | --------------------------- | ------------------------------------------------- |
+| `/v1/user/create`            | POST   | `userCreateSchema`          | Create a new user account                         |
+| `/v1/user/create-with-email` | POST   | `userCreateWithEmailSchema` | Create a new user account with email verification |
+| `/v1/user/login`             | POST   | `userLoginSchema`           | Authenticate user and get access token            |
+| `/v1/user/details`           | POST   | `userDetailsSchema`         | Get user profile details                          |
+| `/v1/user/update`            | POST   | `userUpdateSchema`          | Update user profile information                   |
+| `/v1/user/credit`            | POST   | `userCreditSchema`          | Get user credit balance                           |
+
+### User Validation Schemas
+
+#### userCreateSchema
+
+```typescript
+{
+  emailAddress: string; // email format
+  phoneNumber: string;
+  fullName: string;
+  companyTypeId: string;
+  otpToken: string; // 24 characters
+}
+```
+
+#### userCreateWithEmailSchema
+
+```typescript
+{
+  emailAddress: string; // email format
+  password: string; // minimum 8 characters
+  phoneNumber: string;
+  companyTypeId: string;
+  fullName: string;
+  otpToken: string; // 24 characters
+}
+```
+
+#### userLoginSchema
+
+```typescript
+{
+  emailAddress: string;
+  password: string;
+}
+```
+
+#### userDetailsSchema
+
+```typescript
+{
+  id: string;
+}
+```
+
+#### userUpdateSchema
+
+```typescript
+{
+  fullName?: string;
+  phoneNumber?: string;
+  emailAddress?: string;
+  companyTypeId?: string;
+}
+```
+
+#### userCreditSchema
+
+```typescript
+{
+  id: string;
+}
+```
