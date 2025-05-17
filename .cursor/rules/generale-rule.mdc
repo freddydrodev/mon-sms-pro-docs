@@ -10,7 +10,9 @@ alwaysApply: true
 ---
 
 ## Information
-This project is a documentation for a rest api, the api base url is https://rest.monsms.pro/v1, the project uses Nextra and NextJs to generate the docs.
+This project is a documentation for a rest api of a plateforme called Mon SMS Pro.
+the api base url is https://rest.monsms.pro/v1.
+the project uses Nextra and NextJs to generate the docs.
 base api structure and validation data are available into [api-structure.mdc](mdc:.cursor/rules/api-structure.mdc)
 
 ## Role
@@ -23,6 +25,8 @@ Your goal is to help users complete the REST API documentation design and develo
 When understanding user requirements, designing UI, writing code, solving problems, and iterating on the project, you should always follow these principles:
 
 ### Requirements Understanding
+- Use best practice to product best SEO result even on .mdx or md files
+- SEO improvement should not affect the page title
 - Fully understand user requirements, think from the user's perspective, analyze if there are any missing requirements, and discuss with users to improve requirements.
 - Choose the simplest solution to meet user requirements, avoiding over-design.
 
@@ -37,6 +41,11 @@ When understanding user requirements, designing UI, writing code, solving proble
 - Code Style: Follow consistent coding conventions, such as using ESLint and Prettier for JavaScript/TypeScript code formatting.
 - Performance Optimization: Optimize API performance, reduce resource usage, improve loading speed, and ensure the documentation runs efficiently.
 - Testing and Documentation: Write unit tests for API endpoints, ensure code robustness, and provide clear comments and documentation for future reading and maintenance.
+- The base URL should always be https://rest.monsms.pro/v1
+- Always check [api-structure.mdc](mdc:.cursor/rules/api-structure.mdc) when referencing endpoints
+- When referencing endpoints do not include base url
+- Always check Schema from [api-structure.mdc](mdc:.cursor/rules/api-structure.mdc) when referencing payload for endpoint
+- App is Ivorian so use french and Ivorian number (+225)
 
 ### Problem Solving
 - Thoroughly read related code, understand the REST API working principles.

@@ -1,5 +1,45 @@
 ---
-title: Premier pas
+title: Premiers pas
+description: Guide détaillé pour intégrer et utiliser l'API REST Mon SMS PRO. Découvrez comment envoyer des SMS, gérer vos contacts et automatiser vos communications.
+keywords: API SMS, REST API, envoi SMS, SMS marketing, SMS professionnel, intégration SMS, API Mon SMS PRO
 ---
 
-## Introduction
+import { Callout } from "nextra/components";
+
+# Guide d'intégration de l'API REST Mon SMS PRO
+
+L'API REST Mon SMS PRO est une solution professionnelle puissante permettant d'intégrer facilement l'envoi de SMS dans vos applications. Ce guide complet vous accompagnera pas à pas dans l'intégration et l'utilisation de notre API.
+
+## Qu'est-ce que l'API REST Mon SMS PRO ?
+
+Mon SMS PRO propose une API (Interface de Programmation d'Applications) moderne et robuste qui établit un pont sécurisé entre votre application et notre plateforme d'envoi de SMS professionnels. Notre API suit les standards de l'industrie pour garantir une intégration fluide et une communication fiable.
+
+## Une architecture REST optimisée pour les développeurs
+
+Notre API repose sur l'architecture REST (Representational State Transfer), reconnue comme standard dans l'industrie. Pour simplifier l'expérience développeur, nous avons optimisé notre API en utilisant uniquement la méthode **POST** pour toutes les opérations.
+
+L'URL de base de notre API est : `https://rest.monsms.pro/v1`
+
+### Les avantages de notre API REST :
+
+- **Intégration simplifiée** : Interface HTTP unifiée et intuitive
+- **Performance optimale** : Architecture stateless pour une scalabilité maximale
+- **Compatibilité universelle** : Réponses au format JSON standardisé
+- **Sécurité maximale** : Authentification robuste et communications chiffrées
+
+## Fonctionnalités principales
+
+Notre API vous permet de :
+
+- **Gestion des contacts** : Création, modification, suppression et organisation de contacts individuels
+- **Gestion des groupes** : Administration complète des groupes de contacts pour une meilleure segmentation
+- **Campagnes SMS** : Création et gestion de campagnes SMS ponctuelles, programmées ou récurrentes
+- **Identifiants d'expéditeur** : Configuration et gestion des noms d'expéditeur personnalisés
+- **[Authentification OTP](/libs/rest/features/otp)** : Envoi et vérification de codes à usage unique pour sécuriser l'accès aux applications
+- **Suivi et rapports** : Accès aux statistiques détaillées et historique des envois
+
+Toutes ces fonctionnalités sont accessibles via une interface REST cohérente, permettant une intégration rapide et efficace dans votre stack technologique.
+
+## Sécurité
+
+Pour des raisons de sécurité, il est fortement recommandé de stocker votre clé API dans des variables d'environnement plutôt que de la coder en dur dans votre application. Utilisez un fichier `.env` à la racine de votre projet pour gérer vos variables d'environnement.

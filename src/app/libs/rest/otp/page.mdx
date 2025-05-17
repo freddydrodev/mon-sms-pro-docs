@@ -1,0 +1,253 @@
+---
+title: Authentification OTP
+description: Implémentez l'authentification OTP par SMS avec notre API REST. Guide complet pour l'envoi et la vérification de codes à usage unique, idéal pour la 2FA et la sécurité des applications.
+keywords: OTP SMS, authentification SMS, vérification SMS, code à usage unique, 2FA, double authentification, sécurité SMS, API OTP, vérification téléphone, authentification mobile
+---
+
+import { Callout, Table } from "nextra/components";
+
+# Guide d'authentification OTP par SMS
+
+L'authentification OTP (One-Time Password) par SMS est une méthode de sécurité robuste et largement adoptée qui utilise des codes à usage unique pour vérifier l'identité des utilisateurs. Notre API REST vous permet d'implémenter facilement cette fonctionnalité de sécurité dans vos applications web et mobiles.
+
+## Pourquoi utiliser l'authentification OTP par SMS ?
+
+- **Sécurité renforcée** : Protection contre les attaques par force brute et le vol d'identifiants
+- **Facilité d'utilisation** : Les utilisateurs reçoivent directement le code sur leur téléphone
+- **Conformité** : Respect des normes de sécurité et des réglementations (RGPD, PCI DSS)
+- **Flexibilité** : Personnalisation complète des messages et des paramètres de sécurité
+
+## Fonctionnalités OTP
+
+- Envoi de codes OTP personnalisables
+- Vérification automatique des codes
+- Expiration configurable des codes (5-10 minutes recommandés)
+- Support multilingue pour les messages
+- Historique des tentatives de vérification
+- Protection contre le spam et les abus
+- Intégration simple avec votre application
+
+## Implémentation
+
+### Envoi d'un code OTP
+
+Pour envoyer un code OTP, utilisez l'endpoint suivant :
+
+```bash
+POST /auth/otp/get
+```
+
+#### Paramètres
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>apiKey</Table.Td>
+      <Table.Td>Clé API de votre compte</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>phoneNumber</Table.Td>
+      <Table.Td>Numéro de Téléphone du destinataire</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>length</Table.Td>
+      <Table.Td>Longueur du code entre 4 et 8 chiffres</Table.Td>
+      <Table.Td>Nombre</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>4</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>mode</Table.Td>
+      <Table.Td>Mode d'envoi du code</Table.Td>
+      <Table.Td>"NUMERIC", "ALPHABET", "ALPHA_NUMERIC"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>NUMERIC</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>senderId</Table.Td>
+      <Table.Td>Identifiant de l'expéditeur</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>appName</Table.Td>
+      <Table.Td>Nom de votre application à écrire dans le SMS</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### Vérification d'un code OTP
+
+Pour vérifier un code OTP, utilisez l'endpoint suivant :
+
+```bash
+POST /auth/otp/verify
+```
+
+#### Paramètres
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>apiKey</Table.Td>
+      <Table.Td>Clé API de votre compte</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>token</Table.Td>
+      <Table.Td>Jeton retourné pour validation</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>otp</Table.Td>
+      <Table.Td>Code de vérification envoyé</Table.Td>
+      <Table.Td>Nombre</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>phoneNumber</Table.Td>
+      <Table.Td>Numéro de Téléphone du destinataire</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+## Bonnes pratiques de sécurité
+
+1. **Durée de validité** : Configurez une durée d'expiration appropriée (généralement 5-10 minutes)
+2. **Longueur du code** : Utilisez des codes d'au moins 6 chiffres pour une sécurité optimale
+3. **Limitation des tentatives** : Implémentez une limitation du nombre de tentatives de vérification
+4. **Messages clairs** : Rédigez des messages explicites pour guider l'utilisateur
+5. **Protection contre le spam** : Limitez le nombre de demandes de code par numéro de téléphone
+6. **Journalisation** : Conservez un historique des tentatives pour la sécurité
+
+## Exemple de réponse
+
+### Succès
+
+```json
+{
+  "success": true,
+  "message": "Code OTP envoyé avec succès",
+  "data": {
+    "token": "otp_123456",
+    "expires_at": "2024-03-20T15:30:00Z"
+  }
+}
+```
+
+### Erreur
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "INVALID_CODE",
+    "message": "Code OTP invalide ou expiré"
+  }
+}
+```
+
+## Cas d'utilisation courants
+
+- **Authentification à deux facteurs (2FA)** : Sécurisation des connexions utilisateur
+- **Vérification de numéro de téléphone** : Validation des numéros lors de l'inscription
+- **Réinitialisation de mot de passe** : Sécurisation du processus de récupération
+- **Validation de transactions sensibles** : Protection des opérations bancaires
+- **Connexion sécurisée aux applications** : Authentification mobile renforcée
+- **Accès aux services sensibles** : Protection des données confidentielles
+
+## Exemple d'implémentation
+
+Voici un exemple d'implémentation en JavaScript utilisant fetch :
+
+```javascript
+// Envoi d'un code OTP
+async function sendOTP(phoneNumber) {
+  const response = await fetch("https://rest.monsms.pro/v1/auth/otp/get", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      apiKey: process.env.API_KEY,
+      phoneNumber,
+      length: 6,
+      mode: "NUMERIC",
+      senderId: "MON_SMS",
+      appName: "Mon Application",
+    }),
+  });
+  return await response.json();
+}
+
+// Vérification d'un code OTP
+async function verifyOTP(phoneNumber, otp, token) {
+  const response = await fetch("https://rest.monsms.pro/v1/auth/otp/verify", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      apiKey: process.env.API_KEY,
+      phoneNumber,
+      otp,
+      token,
+    }),
+  });
+  return await response.json();
+}
+```
+
+## FAQ
+
+### Combien de temps est valide un code OTP ?
+
+Les codes OTP sont valides pendant 5 minutes par défaut, mais vous pouvez ajuster cette durée selon vos besoins.
+
+### Puis-je personnaliser le format du code OTP ?
+
+Oui, vous pouvez personnaliser la longueur du code (4-8 caractères) et choisir entre trois modes : NUMERIC, ALPHABET, ou ALPHA_NUMERIC.
+
+### Comment gérer les tentatives échouées ?
+
+Notre API inclut une limitation automatique des tentatives pour prévenir les attaques par force brute.
+
+### L'API OTP est-elle compatible avec tous les pays ?
+
+Oui, notre service est disponible dans la plupart des pays. Contactez-nous pour vérifier la disponibilité dans votre région.
