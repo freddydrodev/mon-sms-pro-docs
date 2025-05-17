@@ -265,6 +265,110 @@ type RecurringConfig = {
 };
 ```
 
+## Liste des campagnes
+
+Vous pouvez récupérer la liste de vos campagnes avec leurs détails de base.
+
+```ts filename="/api/campain/list" showLineNumbers {1,6}
+import { sms } from "@/libs/sms";
+
+const listCampaigns = async () => {
+  try {
+    // Récupération de la liste des campagnes
+    const res = await sms.campain.list();
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+### Paramètres de la liste
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>page</Table.Td>
+      <Table.Td>Numéro de page</Table.Td>
+      <Table.Td>Nombre</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>1</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>limit</Table.Td>
+      <Table.Td>Nombre d'éléments par page</Table.Td>
+      <Table.Td>Nombre</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>10</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>status</Table.Td>
+      <Table.Td>Filtre par statut</Table.Td>
+      <Table.Td>"ALL" | "PENDING" | "SENT" | "FAILED"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>"ALL"</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+## Détails d'une campagne
+
+Vous pouvez récupérer les détails complets d'une campagne spécifique.
+
+```ts filename="/api/campain/details" showLineNumbers {1,6}
+import { sms } from "@/libs/sms";
+
+const getCampaignDetails = async () => {
+  try {
+    // Récupération des détails d'une campagne
+    const res = await sms.campain.get("campaign_id");
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+### Structure de réponse
+
+```ts
+type CampaignDetails = {
+  id: string; // Identifiant unique de la campagne
+  name: string; // Nom de la campagne
+  type: "SMS" | "SCHEDULED" | "RECURRING"; // Type de campagne
+  status: "PENDING" | "SENT" | "FAILED"; // Statut de la campagne
+  text: string; // Contenu du message
+  senderId: string; // Identifiant de l'expéditeur
+  scheduledDate?: Date; // Date de programmation (pour type SCHEDULED)
+  recurring?: RecurringConfig; // Configuration des répétitions (pour type RECURRING)
+  contacts: Contact[]; // Liste des contacts destinataires
+  stats: {
+    total: number; // Nombre total de messages
+    sent: number; // Nombre de messages envoyés
+    failed: number; // Nombre de messages échoués
+    pending: number; // Nombre de messages en attente
+  };
+  createdAt: Date; // Date de création
+  updatedAt: Date; // Date de dernière mise à jour
+};
+```
+
+<Callout type="info">
+  Les détails d'une campagne incluent des statistiques en temps réel sur l'état
+  d'envoi des messages et la liste complète des contacts destinataires.
+</Callout>
+
 ## Bonnes pratiques
 
 1. **Longueur des messages** : Respectez les limites de caractères

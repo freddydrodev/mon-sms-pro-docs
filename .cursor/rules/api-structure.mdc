@@ -28,14 +28,11 @@ alwaysApply: true
 {
   name?: string;
   contacts: Array<{
-    id: string;
+    id?: string;
     phone: string;
-    name: string;
+    name?: string;
     firstName?: string;
     lastName?: string;
-    nom_complet?: string;
-    prenom?: string;
-    nom_de_famille?: string;
     sex?: "M" | "F";
   }>;
   groupsIds: string[];
@@ -71,14 +68,11 @@ alwaysApply: true
 {
   name?: string;
   contacts: Array<{
-    id: string;
+    id?: string;
     phone: string;
-    name: string;
+    name?: string;
     firstName?: string;
     lastName?: string;
-    nom_complet?: string;
-    prenom?: string;
-    nom_de_famille?: string;
     sex?: "M" | "F";
   }>;
   groupsIds: string[];
@@ -95,14 +89,11 @@ alwaysApply: true
 {
   name?: string;
   contacts: Array<{
-    id: string;
+    id?: string;
     phone: string;
-    name: string;
+    name?: string;
     firstName?: string;
     lastName?: string;
-    nom_complet?: string;
-    prenom?: string;
-    nom_de_famille?: string;
     sex?: "M" | "F";
   }>;
   groupsIds: string[];
@@ -140,9 +131,6 @@ alwaysApply: true
   name: string;
   firstName?: string;
   lastName?: string;
-  nom_complet?: string;
-  prenom?: string;
-  nom_de_famille?: string;
   sex?: "M" | "F";
 }
 ```
@@ -179,14 +167,11 @@ emaontcont
   name: string;
   description?: string;
   contacts: Array<{
-    id: string;
+    id?: string;
     phone: string;
-    name: string;
+    name?: string;
     firstName?: string;
     lastName?: string;
-    nom_complet?: string;
-    prenom?: string;
-    nom_de_famille?: string;
     sex?: "M" | "F";
   }>;
 }
