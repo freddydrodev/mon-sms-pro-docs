@@ -1,42 +1,59 @@
 ---
-title: Contacts
+sidebarTitle: Gestion des Contacts 👥
+title: Gestion des Contacts SMS | SDK JavaScript Mon SMS PRO
+description: Guide complet pour gérer vos contacts SMS avec notre SDK JavaScript. Créez, mettez à jour et gérez votre carnet d'adresses SMS pour des campagnes plus efficaces.
+keywords: contacts SMS, gestion contacts, carnet d'adresses SMS, JavaScript SMS, API SMS, TypeScript SMS, numéros de téléphone, import contacts, mise à jour contacts, suppression contacts
 ---
 
 import { Callout, Table } from "nextra/components";
 
-## Introduction[#intro]
+# Gestion des Contacts SMS
 
-Les contacts sont des numéros de téléphone qui sont enregistrés dans votre compte et qui peuvent être utilisés pour envoyer des SMS.
+La gestion des contacts est une fonctionnalité essentielle pour organiser efficacement vos campagnes SMS. Notre SDK vous permet de créer, mettre à jour et gérer facilement votre carnet d'adresses SMS, facilitant ainsi l'envoi de messages à vos destinataires.
 
-<Callout type="warning" emoji="⚠️">
-  N'oubliez pas de mettre l'index du pays sans le **(+)** avant le numéro du
-  contact.
-</Callout>
+## Structure des contacts
 
-L'objet Contact a la structure suivante:
+Chaque contact dans votre carnet d'adresses suit une structure standardisée :
 
 ```ts
 type Contact = {
-  phone: string;
-  name?: string;
-  firstName?: string;
-  lastName?: string;
-  sex: "M" | "F";
+  phone: string; // Numéro de téléphone
+  name: string; // Nom complet
+  firstName?: string; // Prénom (optionnel)
+  lastName?: string; // Nom de famille (optionnel)
+  sex: "M" | "F"; // Genre
 };
 ```
 
+<Callout type="warning" emoji="⚠️">
+  Important : Incluez l'indicatif du pays sans le symbole **(+)** avant le
+  numéro de téléphone. Exemple : "22500000000" pour un numéro ivoirien.
+</Callout>
+
+## Fonctionnalités
+
+- Création de contacts individuels ou en masse
+- Mise à jour des informations de contact
+- Suppression de contacts
+- Liste complète des contacts
+- Gestion des informations détaillées (nom, prénom, genre)
+
 ## Utilisation
 
-Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
-vous pouvez utiliser la propriété `contact` de votre variable.
+Après avoir [initialisé](/libs/js/get-started/#init) votre bibliothèque, vous pouvez utiliser la propriété `contact` pour gérer vos contacts.
 
-```ts filename="/api/contact" showLineNumbers {1,5-7,17,27-29,39-42}
+### Création de contacts
+
+```ts filename="/api/contact" showLineNumbers {1,5-10,18,30-32,42-44}
 import { sms } from "@/libs/sms";
 
 const createContact = async () => {
   try {
     const res = await sms.contact.create({
-      contacts: [{ phone: "22500000000" }, { phone: "2250101010101" }],
+      contacts: [
+        { phone: "22500000000", name: "John Doe" },
+        { phone: "22500000001", name: "Jane Doe" },
+      ],
     });
 
     console.log(res);
@@ -70,7 +87,6 @@ const deleteContact = async () => {
 const updateContact = async () => {
   try {
     const res = await sms.contact.update({
-      id: "id_of_the_contact",
       phone: "2250000000000",
     });
 
@@ -81,9 +97,18 @@ const updateContact = async () => {
 };
 ```
 
-## Propriétés
+<Callout type="info">
+  La variable `sms` est l'instance initialisée de notre SDK. Elle fournit quatre
+  méthodes principales pour la gestion des contacts : `create` pour la création,
+  `list` pour la liste, `update` pour la mise à jour et `delete` pour la
+  suppression.
+</Callout>
+
+## Documentation de l'API
 
 ### sms.contact.create
+
+Crée un ou plusieurs nouveaux contacts dans votre carnet d'adresses.
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -107,7 +132,7 @@ const updateContact = async () => {
       <Table.Td>name</Table.Td>
       <Table.Td>Nom complet du contact</Table.Td>
       <Table.Td>Texte</Table.Td>
-      <Table.Td>Oui</Table.Td>
+      <Table.Td>Non</Table.Td>
       <Table.Td>{""}</Table.Td>
     </Table.Tr>
     <Table.Tr>
@@ -126,7 +151,7 @@ const updateContact = async () => {
     </Table.Tr>
     <Table.Tr>
       <Table.Td>sex</Table.Td>
-      <Table.Td>Sexe du contact</Table.Td>
+      <Table.Td>Genre du contact</Table.Td>
       <Table.Td>"M", "F"</Table.Td>
       <Table.Td>Oui</Table.Td>
       <Table.Td>M</Table.Td>
@@ -135,6 +160,8 @@ const updateContact = async () => {
 </Table>
 
 ### sms.contact.delete
+
+Supprime un ou plusieurs contacts de votre carnet d'adresses.
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -149,14 +176,17 @@ const updateContact = async () => {
   <tbody>
     <Table.Tr>
       <Table.Td>contactIds</Table.Td>
-      <Table.Td>Array d'identifiants des contacts</Table.Td>
+      <Table.Td>Liste des identifiants des contacts à supprimer</Table.Td>
       <Table.Td>Array de Texte</Table.Td>
       <Table.Td>Non</Table.Td>
       <Table.Td>{""}</Table.Td>
     </Table.Tr>
   </tbody>
 </Table>
+
 ### sms.contact.update
+
+Met à jour les informations d'un contact existant.
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -170,15 +200,8 @@ const updateContact = async () => {
   </thead>
   <tbody>
     <Table.Tr>
-      <Table.Td>id</Table.Td>
-      <Table.Td>Identifiant du contact</Table.Td>
-      <Table.Td>Texte</Table.Td>
-      <Table.Td>Non</Table.Td>
-      <Table.Td>{""}</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
       <Table.Td>name</Table.Td>
-      <Table.Td>Nom du contact</Table.Td>
+      <Table.Td>Nom complet du contact</Table.Td>
       <Table.Td>Texte</Table.Td>
       <Table.Td>Oui</Table.Td>
       <Table.Td>{""}</Table.Td>
@@ -206,13 +229,31 @@ const updateContact = async () => {
     </Table.Tr>
     <Table.Tr>
       <Table.Td>sex</Table.Td>
-      <Table.Td>Sexe du contact</Table.Td>
+      <Table.Td>Genre du contact</Table.Td>
       <Table.Td>"M", "F"</Table.Td>
       <Table.Td>Oui</Table.Td>
       <Table.Td>M</Table.Td>
     </Table.Tr>
   </tbody>
 </Table>
+
 ### sms.contact.list
 
-Cette méthode ne recoit aucun argument.
+Récupère la liste complète de tous vos contacts.<br />
+_Cette méthode ne reçoit aucun argument._
+
+## Bonnes pratiques
+
+1. **Format des numéros** : Utilisez toujours le format international sans le "+"
+2. **Données complètes** : Remplissez autant d'informations que possible pour chaque contact
+3. **Mise à jour régulière** : Maintenez vos contacts à jour pour des campagnes plus efficaces
+4. **Vérification** : Validez les numéros avant de les ajouter
+5. **Organisation** : Utilisez des noms cohérents pour faciliter la recherche
+
+## Cas d'utilisation
+
+- Gestion de listes de diffusion
+- Campagnes marketing ciblées
+- Notifications clients
+- Service client
+- Rappels et alertes

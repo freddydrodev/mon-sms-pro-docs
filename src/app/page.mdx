@@ -1,42 +1,84 @@
 ---
-title: Introduction
+sidebarTitle: Introduction 🚀
+title: Documentation API Mon SMS PRO | Envoi de SMS Professionnels
+description: Documentation complète pour l'intégration de l'envoi de SMS professionnels via l'API Mon SMS PRO. Support pour JavaScript, Dart et API REST. Envoyez des SMS en masse partout dans le monde.
+keywords: API SMS, envoi SMS, SMS professionnel, SMS marketing, API REST, JavaScript SDK, Dart SDK, documentation SMS, intégration SMS, SMS en masse
 ---
 
 import { Callout } from "nextra/components";
 import { Information } from "iconsax-react";
 import { Cards } from "nextra/components";
 
-## Introduction
+# Documentation API Mon SMS PRO
 
-Mon SMS PRO est une application mobile permettant d'envoyer des SMS PRO en masse.
-Bien que basée en Côte d’Ivoire, la plateforme permet d’envoyer des SMS partout dans le monde.
-Il s'agit de la documentation dédiée aux développeurs souhaitant envoyer des SMS PRO ou POP UP Flash via une application tierce.
+Mon SMS PRO est une plateforme professionnelle d'envoi de SMS en masse, basée en Côte d'Ivoire mais opérant à l'échelle mondiale. Notre solution vous permet d'intégrer facilement l'envoi de SMS professionnels et POP UP Flash dans vos applications tierces.
+
+## Fonctionnalités principales
+
+- **Envoi de SMS en masse** : Gestion efficace des campagnes SMS
+- **SMS professionnels** : Support des messages professionnels, OTP, message programmé, message répété, etc...
+- **API moderne** : Documentation complète et SDKs officiels
+- **Sécurité** : Authentification robuste et communications chiffrées
 
 <Callout type="warning" emoji="⚠️">
-  Les SMS ne sont envoyés que vers les pays qui ne sont pas soumis à à certaines
-  restrictions politiques.
+  Les SMS ne sont envoyés qu'en Côte d'Ivoire pour le moment. Nous travaillons à
+  étendre notre couverture à d'autres pays.
 </Callout>
 
-## Bibliothèques & Restful API [#sdk]
+## Solutions d'intégration [#sdk]
 
-Nous disposons de 2 Bibliothèques ainsi qu'une API Restful qui vous permettra d'avoir une intégration plus fluide.
+Nous proposons plusieurs solutions d'intégration pour répondre à tous vos besoins de développement :
 
-- La Bibliothèque Javascript est compatible avec TypeScript.
-- La Bibliothèque Dart est compatible avec Flutter.
-- Vous pouvez utiliser le Restful API pour tout autre language.
+### Bibliothèques officielles
+
+- **JavaScript/TypeScript** : SDK officiel pour les applications web et Node.js
+- **Dart/Flutter** : SDK natif pour les applications mobiles Flutter
+- **API REST** : Solution universelle compatible avec tous les langages
 
 <Cards>
-  <Cards.Card title="JavaScript" href="/libs/js/get-started" arrow />
-  <Cards.Card title="Dart" href="/libs/dart/get-started" arrow />
-  <Cards.Card title="Restful API" href="/libs/rest/get-started" arrow />
+  <Cards.Card
+    title="JavaScript SDK"
+    href="/libs/js/get-started"
+    description="Intégration facile pour les applications web et Node.js"
+    arrow
+  />
+  <Cards.Card
+    title="Dart SDK"
+    href="/libs/dart/get-started"
+    description="SDK natif pour les applications Flutter"
+    arrow
+  />
+  <Cards.Card
+    title="API REST"
+    href="/libs/rest/get-started"
+    description="Solution universelle pour tous les langages"
+    arrow
+  />
 </Cards>
 
-## Clé API [#api-key]
+## Authentification [#api-key]
 
-Afin d'utiliser les différentes bibliothèques ou l'API Restful vous devrez fournir votre clé API qui est disponible dans la section paramètres de l'application [Mon SMS PRO](https://onelink.to/kg2z8q). <br />
-Une fois que vous avez récupéré cette clé dans votre presse-papier, suivez les instructions selon votre choix.
+Pour commencer à utiliser nos services, vous aurez besoin d'une clé API. Cette clé est disponible dans la section paramètres de l'application [Mon SMS PRO](https://monsms.pro).
+
+### Comment obtenir votre clé API
+
+1. Téléchargez l'application [Mon SMS PRO](https://monsms.pro)
+2. Connectez-vous à votre compte
+3. Accédez à la section paramètres
+4. Copiez votre clé API
 
 <Callout type="info">
-  Lorsque vous utilisez votre clé, n'oubliez pas de la sauvegarder dans un
-  fichier .env si possible.
+  Pour des raisons de sécurité, stockez toujours votre clé API dans un fichier
+  `.env` ou dans les variables d'environnement de votre application. Ne la
+  partagez jamais publiquement.
 </Callout>
+
+## Démarrage rapide
+
+Choisissez votre méthode d'intégration préférée et suivez notre guide de démarrage rapide :
+
+1. **JavaScript/TypeScript** : Installation via npm, yarn ou pnpm
+2. **Dart/Flutter** : Ajout de la dépendance dans pubspec.yaml
+3. **API REST** : Utilisation directe des endpoints HTTP
+
+Consultez la documentation spécifique à chaque solution pour plus de détails sur l'implémentation.

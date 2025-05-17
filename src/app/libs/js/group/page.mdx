@@ -1,0 +1,281 @@
+---
+sidebarTitle: Gestion des Groupes 📁
+title: Gestion des Groupes SMS | SDK JavaScript Mon SMS PRO
+description: Guide complet pour gérer vos groupes de contacts SMS avec notre SDK JavaScript. Créez, mettez à jour et gérez vos groupes pour des campagnes plus efficaces.
+keywords: groupes SMS, gestion groupes, contacts SMS, JavaScript SMS, API SMS, TypeScript SMS, segmentation contacts, import groupes, mise à jour groupes
+---
+
+import { Callout, Table } from "nextra/components";
+
+# Gestion des Groupes SMS
+
+La gestion des groupes est une fonctionnalité essentielle pour organiser efficacement vos contacts et optimiser vos campagnes SMS. Notre SDK vous permet de créer, mettre à jour et gérer facilement vos groupes de contacts, facilitant ainsi l'envoi de messages ciblés à vos destinataires.
+
+## Structure des groupes
+
+Chaque groupe dans votre système suit une structure standardisée :
+
+```ts
+type Group = {
+  name: string; // Nom du groupe
+  description?: string; // Description du groupe (optionnel)
+  contacts: Array<{
+    id?: string; // Identifiant du contact if exists
+    phone: string; // Numéro de téléphone
+    name?: string; // Nom complet (optionnel)
+    firstName?: string; // Prénom (optionnel)
+    lastName?: string; // Nom de famille (optionnel)
+    sex?: "M" | "F"; // Genre (optionnel)
+  }>;
+};
+```
+
+## Fonctionnalités
+
+- Création de groupes avec description
+- Ajout de contacts existants aux groupes
+- Liste complète des groupes
+- Récupération des détails d'un groupe spécifique
+- Organisation des contacts par catégories
+
+## Utilisation
+
+Après avoir [initialisé](/libs/js/get-started/#init) votre bibliothèque, vous pouvez utiliser la propriété `group` pour gérer vos groupes.
+
+### Création d'un groupe
+
+```ts filename="/api/group" showLineNumbers {1,6-21}
+import { sms } from "@/libs/sms";
+
+const createGroup = async () => {
+  try {
+    const res = await sms.group.create({
+      name: "Clients Premium",
+      description: "Groupe des clients premium avec abonnement actif",
+      contacts: [
+        {
+          phone: "22500000000",
+          name: "John Doe",
+        },
+        {
+          id: "contact_2",
+          phone: "22500000001",
+          name: "Jane Doe",
+          firstName: "Jane",
+          lastName: "Doe",
+        },
+      ],
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+### Liste des groupes
+
+```ts filename="/api/group/list" showLineNumbers {1,5}
+import { sms } from "@/libs/sms";
+
+const listGroups = async () => {
+  try {
+    const res = await sms.group.list();
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+### Détails d'un groupe
+
+```ts filename="/api/group/details" showLineNumbers {1,5-7}
+import { sms } from "@/libs/sms";
+
+const getGroupDetails = async () => {
+  try {
+    const res = await sms.group.get({
+      id: "group_id",
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+### Suppression d'un groupe
+
+```ts filename="/api/group/delete" showLineNumbers {1,5-7}
+import { sms } from "@/libs/sms";
+
+const deleteGroup = async () => {
+  try {
+    const res = await sms.group.delete({
+      id: "group_id",
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+<Callout type="info">
+  La variable `sms` est l'instance initialisée de notre SDK. Elle fournit quatre
+  méthodes principales pour la gestion des groupes : `create` pour la création,
+  `list` pour la liste, `get` pour les détails et `delete` pour la suppression.
+</Callout>
+
+## Documentation de l'API
+
+### sms.group.create
+
+Crée un nouveau groupe de contacts.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>name</Table.Td>
+      <Table.Td>Nom du groupe</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>description</Table.Td>
+      <Table.Td>Description du groupe</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>contacts</Table.Td>
+      <Table.Td>Liste des contacts du groupe</Table.Td>
+      <Table.Td>Array de Contact Object</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{[]}</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### sms.group.list
+
+Récupère la liste de tous vos groupes.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>orderBy</Table.Td>
+      <Table.Td>Critère de tri</Table.Td>
+      <Table.Td>"name" | "createdAt"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>createdAt</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>page</Table.Td>
+      <Table.Td>Numéro de page</Table.Td>
+      <Table.Td>Nombre</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>1</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>limit</Table.Td>
+      <Table.Td>Nombre d'éléments par page</Table.Td>
+      <Table.Td>Nombre</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>10</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### sms.group.get
+
+Récupère les détails d'un groupe spécifique.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>id</Table.Td>
+      <Table.Td>Identifiant du groupe</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### sms.group.delete
+
+Supprime un groupe spécifique.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>id</Table.Td>
+      <Table.Td>Identifiant du groupe à supprimer</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+## Bonnes pratiques
+
+1. **Nommage** : Utilisez des noms de groupes clairs et descriptifs
+2. **Description** : Ajoutez des descriptions détaillées pour faciliter l'organisation
+3. **Contacts** : Vérifiez que les contacts existent avant de les ajouter
+4. **Organisation** : Créez une structure logique de groupes
+5. **Maintenance** : Mettez régulièrement à jour vos groupes
+
+## Cas d'utilisation
+
+- Segmentation des clients
+- Campagnes marketing ciblées
+- Notifications par catégorie
+- Service client personnalisé
+- Rappels et alertes spécifiques
+- Gestion des abonnements
+- Communication interne

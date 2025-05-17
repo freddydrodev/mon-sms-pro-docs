@@ -1,19 +1,29 @@
 ---
-title: Nom d'Expéditeur
+sidebarTitle: Nom d'Expéditeur 📱
+title: Gestion des Noms d'Expéditeur SMS | SDK JavaScript Mon SMS PRO
+description: Guide complet pour gérer les noms d'expéditeur (senderId) dans vos SMS avec notre SDK JavaScript. Créez, listez et gérez vos identifiants d'expéditeur pour une meilleure délivrabilité de vos messages.
+keywords: senderId SMS, nom expéditeur SMS, identité SMS, marque SMS, délivrabilité SMS, JavaScript SMS, API SMS, gestion expéditeur, campagnes SMS, TypeScript SMS
 ---
 
-import { Table } from "nextra/components";
+import { Callout, Table } from "nextra/components";
 
-## Introduction
+# Gestion des Noms d'Expéditeur SMS
 
-Le nom de l'expéditeur **(senderId)** est le nom utilisé pour identifier l'expéditeur du SMS.
-Il peut représenter votre marque, votre entreprise, etc...
-Il utilise uniquement des caractères alphanumériques et est limité à 11 caractères maximum.
+Le nom d'expéditeur (senderId) est un élément crucial pour l'identité de vos SMS. Il permet d'identifier clairement l'origine de vos messages et d'améliorer leur délivrabilité. Le senderId peut représenter votre marque, votre entreprise ou tout autre identifiant pertinent, limité à 11 caractères alphanumériques.
+
+## Fonctionnalités
+
+- Création de noms d'expéditeur personnalisés
+- Gestion de plusieurs identifiants
+- Suivi des campagnes par expéditeur
+- Validation par les opérateurs téléphoniques
+- Amélioration de la délivrabilité des SMS
 
 ## Utilisation
 
-Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
-vous pouvez utiliser la propriété `sender` de votre variable.
+Après avoir [initialisé](/libs/js/get-started/#init) votre bibliothèque, vous pouvez utiliser la propriété `sender` pour gérer vos noms d'expéditeur.
+
+### Création d'un nom d'expéditeur
 
 ```ts filename="/api/sender" showLineNumbers {1,6-9,20,31-33}
 import { sms } from "@/libs/sms";
@@ -57,15 +67,17 @@ const getSenderCampain = async () => {
 };
 ```
 
-Comme vous pouvez le constater nous avons utilisé la variable `sms` créée
-précédemment pour envoyer et vérifier le code d'authentification à travers
-3 fonctions distinctes représentant ici 3 API.
+<Callout type="info">
+  La variable `sms` est l'instance initialisée de notre SDK. Elle fournit trois
+  méthodes principales pour la gestion des noms d'expéditeur : `create` pour la
+  création, `list` pour la liste et `campains` pour le suivi des campagnes.
+</Callout>
 
-## Propriétés
+## Documentation de l'API
 
 ### sms.sender.create
 
-Crée un nouveau nom d'expéditeur.
+Crée un nouveau nom d'expéditeur pour vos SMS.
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -88,8 +100,8 @@ Crée un nouveau nom d'expéditeur.
     <Table.Tr>
       <Table.Td>description</Table.Td>
       <Table.Td>
-        C'est la description fournie aux opérateurs téléphoniques afin de
-        valider le nom de l'expéditeur utilisé.
+        Description fournie aux opérateurs téléphoniques pour valider le nom de
+        l'expéditeur utilisé.
       </Table.Td>
       <Table.Td>Texte</Table.Td>
       <Table.Td>Non</Table.Td>
@@ -100,7 +112,7 @@ Crée un nouveau nom d'expéditeur.
 
 ### sms.sender.campains
 
-Récupère la liste des campagnes du nom d'expéditeur par son id.
+Récupère la liste des campagnes associées à un nom d'expéditeur spécifique.
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -116,8 +128,8 @@ Récupère la liste des campagnes du nom d'expéditeur par son id.
     <Table.Tr>
       <Table.Td>id</Table.Td>
       <Table.Td>
-        Identifiant unique du nom d'expéditeur. vous pouvez l'obtenir grace à la
-        méthode `sms.sender.list`, c'est la clé `id` de chaque senderId.
+        Identifiant unique du nom d'expéditeur. Obtenez-le via la méthode
+        `sms.sender.list`, c'est la clé `id` de chaque senderId.
       </Table.Td>
       <Table.Td>Texte</Table.Td>
       <Table.Td>Non</Table.Td>
@@ -128,5 +140,21 @@ Récupère la liste des campagnes du nom d'expéditeur par son id.
 
 ### sms.sender.list
 
-Récupère la liste de tous les noms d'expéditeurs.<br />
-_Cette méthode ne recoit aucun argument._
+Récupère la liste complète de tous vos noms d'expéditeurs.<br />
+_Cette méthode ne reçoit aucun argument._
+
+## Bonnes pratiques
+
+1. **Nommage** : Choisissez des noms d'expéditeur courts et mémorisables
+2. **Cohérence** : Utilisez le même nom d'expéditeur pour une même campagne
+3. **Validation** : Attendez la validation par les opérateurs avant d'utiliser un nouveau senderId
+4. **Description** : Fournissez une description claire pour faciliter la validation
+5. **Suivi** : Surveillez régulièrement les performances de vos campagnes par expéditeur
+
+## Cas d'utilisation
+
+- Marketing et campagnes promotionnelles
+- Notifications transactionnelles
+- Alertes et communications d'urgence
+- Service client et support
+- Rappels et confirmations

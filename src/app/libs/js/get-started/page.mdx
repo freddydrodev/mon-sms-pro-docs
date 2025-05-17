@@ -1,44 +1,106 @@
 ---
-title: Premier pas
+sidebarTitle: Premier pas 🚀
+title: Guide d'intégration JavaScript | SDK Mon SMS PRO
+description: Guide complet pour intégrer le SDK JavaScript Mon SMS PRO dans vos applications. Support pour Node.js, Next.js et autres frameworks. Installation, configuration et exemples d'utilisation.
+keywords: JavaScript SDK, Node.js SMS, Next.js SMS, API SMS JavaScript, intégration SMS, npm package, TypeScript SMS, dotenv, sécurité API
 ---
 
 import { Callout } from "nextra/components";
 
-## Débuter avec JavaScript
+# Guide d'intégration JavaScript
 
-Afin de Débuter avec [notre bibliothèque](https://www.npmjs.com/package/@freddydrodev/monsmspro) Javascript dans votre projet Node.js / Next.js / etc... Il vous suffir d'utiliser le package manager de votre choix.
+Ce guide vous accompagne dans l'intégration du SDK JavaScript Mon SMS PRO dans vos applications. Notre SDK est compatible avec Node.js, Next.js et la plupart des frameworks JavaScript modernes.
+
+## Installation
+
+Pour commencer, installez le package via npm :
 
 ```sh npm2yarn copy
 npm i @freddydrodev/monsmspro
 ```
 
-## Securité
-
-Pour des raisons de sécurité, il est utile d'installer le package [dotenv](https://www.npmjs.com/package/dotenv). Privilégiez surtout l'utilisation du côté serveur plutôt que du côté client.
-
 <Callout type="info">
-  Je tiens à souligner que certains frameworks tels que Next.js intègrent déjà
-  ce package.
+  Vous pouvez également utiliser yarn (`yarn add @freddydrodev/monsmspro`) ou
+  pnpm (`pnpm add @freddydrodev/monsmspro`) selon votre préférence.
 </Callout>
 
-Après l'installation, vous devez créer un fichier `.env` à la racine de votre projet.
+## Configuration de la sécurité
+
+Pour une meilleure sécurité, nous recommandons d'utiliser le package [dotenv](https://www.npmjs.com/package/dotenv) pour gérer vos variables d'environnement. Cette approche est particulièrement importante pour protéger votre clé API.
+
+<Callout type="info">
+  De nombreux frameworks modernes comme Next.js intègrent déjà dotenv. Vérifiez
+  la documentation de votre framework pour plus de détails.
+</Callout>
+
+### Configuration des variables d'environnement
+
+1. Créez un fichier `.env` à la racine de votre projet :
 
 ```bash
 touch .env
 ```
 
-Ajoutez les lignes suivantes au fichier `.env`, en remplacant `your_api_key` par votre [clé API](/#api-key).
+2. Ajoutez votre clé API au fichier `.env` :
 
-```dart filename=".env"
+```env filename=".env"
 API_KEY="your_api_key"
 ```
 
-## Initialisation[#init]
+<Callout type="warning">
+  N'oubliez pas d'ajouter `.env` à votre `.gitignore` pour éviter de committer
+  accidentellement votre clé API.
+</Callout>
 
-Créez une instance de la classe MonSMSPRO dans un fichier de votre choix afin de la réutiliser.
+## Initialisation du SDK [#init]
+
+Créez une instance du SDK dans un fichier dédié pour une meilleure organisation de votre code :
 
 ```ts copy filename="./libs/sms.ts"
 import { MonSMSPRO } from "@freddydrodev/monsmspro";
 
 export const sms = MonSMSPRO(process.env["API_KEY"] ?? "");
 ```
+
+### Bonnes pratiques
+
+- **Sécurité** : Utilisez toujours des variables d'environnement pour la clé API
+- **Organisation** : Centralisez l'instance du SDK dans un fichier dédié
+- **TypeScript** : Le SDK est entièrement typé pour une meilleure expérience de développement
+- **Réutilisation** : Importez l'instance `sms` là où vous en avez besoin
+
+## Exemple d'utilisation
+
+```typescript
+import { sms } from "./libs/sms";
+
+// Envoi d'un SMS
+async function sendSMS() {
+  try {
+    const response = await sms.send({
+      to: "+22500000000",
+      message: "Votre message ici",
+    });
+    console.log("SMS envoyé avec succès:", response);
+  } catch (error) {
+    console.error("Erreur lors de l'envoi:", error);
+  }
+}
+```
+
+## Support des frameworks
+
+Notre SDK est compatible avec :
+
+- **Node.js** : Applications backend et scripts
+- **Next.js** : Applications full-stack
+- **React** : Applications frontend (côté serveur uniquement)
+- **Express** : Applications API
+- **NestJS** : Applications enterprise
+- **TypeScript** : Support natif des types
+
+## Prochaines étapes
+
+- [Documentation de l'API](/libs/js/api)
+- [Exemples d'utilisation](/libs/js/examples)
+- [Guide de déploiement](/libs/js/deployment)

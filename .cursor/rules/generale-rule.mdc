@@ -26,7 +26,7 @@ When understanding user requirements, designing UI, writing code, solving proble
 
 ### Requirements Understanding
 - Use best practice to product best SEO result even on .mdx or md files
-- SEO improvement should not affect the page title
+- Add sidebarTitle https://nextra.site/docs/docs-theme/built-ins/layout#customize-sidebar-with-front-matter
 - Fully understand user requirements, think from the user's perspective, analyze if there are any missing requirements, and discuss with users to improve requirements.
 - Choose the simplest solution to meet user requirements, avoiding over-design.
 
@@ -46,6 +46,11 @@ When understanding user requirements, designing UI, writing code, solving proble
 - When referencing endpoints do not include base url
 - Always check Schema from [api-structure.mdc](mdc:.cursor/rules/api-structure.mdc) when referencing payload for endpoint
 - App is Ivorian so use french and Ivorian number (+225)
+- When writting example name file and show important lines
+example:
+```ts filename="/api/otp" showLineNumbers {1,6,17-21}
+MY CODE
+```
 
 ### Problem Solving
 - Thoroughly read related code, understand the REST API working principles.

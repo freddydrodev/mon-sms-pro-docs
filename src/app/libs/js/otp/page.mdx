@@ -1,27 +1,36 @@
 ---
-title: One Time Password
+sidebarTitle: Authentification OTP 🔐
+title: Guide d'authentification OTP par SMS | SDK JavaScript Mon SMS PRO
+description: Implémentez l'authentification OTP par SMS avec notre SDK JavaScript. Guide complet pour l'envoi et la vérification de codes à usage unique, idéal pour la 2FA et la sécurité des applications.
+keywords: OTP JavaScript, SMS OTP, authentification SMS, vérification SMS, code à usage unique, 2FA, double authentification, sécurité SMS, TypeScript OTP, vérification téléphone
 ---
 
 import { Callout, Table } from "nextra/components";
 
-## Introduction
+# Authentification OTP par SMS
 
-One Time Password (OTP) est une méthode de connexion qui permet à l'utilisateur de se
-connecter depuis son numéro de téléphone en recevant un code par SMS qu'il doit saisir afin de
-confirmer son identité. Cette technique est souvent utilisée pour éviter les erreurs lors de la
-vérification des numéros d'un utilisateur, ou pour une double authentification.
+L'authentification OTP (One-Time Password) est une méthode de sécurité robuste qui permet aux utilisateurs de se connecter en utilisant leur numéro de téléphone. Le système envoie un code unique par SMS que l'utilisateur doit saisir pour confirmer son identité. Cette technique est idéale pour la vérification des numéros de téléphone et l'authentification à deux facteurs (2FA).
+
+## Fonctionnalités
+
+- Envoi de codes OTP personnalisables
+- Vérification automatique des codes
+- Support de différents formats (numérique, alphabétique, alphanumérique)
+- Personnalisation des messages
+- Gestion des tentatives de vérification
 
 ## Utilisation
 
-Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
-vous pouvez utiliser la propriété `otp` pour envoyer et vérifier les codes.
+Après avoir [initialisé](/libs/js/get-started/#init) votre bibliothèque, vous pouvez utiliser la propriété `otp` pour gérer l'authentification par SMS.
+
+### Envoi d'un code OTP
 
 ```ts filename="/api/otp" showLineNumbers {1,6,17-21}
 import { sms } from "@/libs/sms";
 
 const sendOtp = async () => {
   try {
-    // Send the OTP code to the phone number
+    // Envoi du code OTP au numéro de téléphone
     const res = await sms.otp.get({ phoneNumber: "22500000000" });
 
     console.log(res);
@@ -32,7 +41,7 @@ const sendOtp = async () => {
 
 const verifyOtp = async () => {
   try {
-    // Verify the OTP code using the phone number, OTP code, and token
+    // Vérification du code OTP avec le numéro, le code et le token
     const res = await sms.otp.verify({
       phoneNumber: "22500000000",
       otp: "1234",
@@ -46,11 +55,13 @@ const verifyOtp = async () => {
 };
 ```
 
-Comme vous pouvez le constater nous avons utilisé la variable `sms` créée
-précédemment pour envoyer et vérifier le code d'authentification à travers
-2 fonctions distinctes représentant ici 2 API.
+<Callout type="info">
+  La variable `sms` est l'instance initialisée de notre SDK. Elle fournit deux
+  méthodes principales pour l'authentification OTP : `get` pour l'envoi et
+  `verify` pour la vérification.
+</Callout>
 
-## Propriétés
+## Documentation de l'API
 
 ### sms.otp.get
 
@@ -97,7 +108,7 @@ Permet d'envoyer un code d'authentification (OTP) par SMS au numéro de téléph
     </Table.Tr>
     <Table.Tr>
       <Table.Td>appName</Table.Td>
-      <Table.Td>Nom de votre application a ecrire dans le SMS</Table.Td>
+      <Table.Td>Nom de votre application à écrire dans le SMS</Table.Td>
       <Table.Td>Texte</Table.Td>
       <Table.Td>Oui</Table.Td>
       <Table.Td>{""}</Table.Td>
@@ -143,3 +154,19 @@ Permet de vérifier un code d'authentification (OTP) envoyé par SMS.
     </Table.Tr>
   </tbody>
 </Table>
+
+## Bonnes pratiques
+
+1. **Sécurité** : Utilisez des codes d'au moins 6 caractères pour une meilleure sécurité
+2. **Expiration** : Les codes OTP expirent après 5 minutes par défaut
+3. **Tentatives** : Limitez le nombre de tentatives de vérification
+4. **Messages** : Personnalisez les messages pour une meilleure expérience utilisateur
+5. **Gestion des erreurs** : Implémentez une gestion appropriée des erreurs
+
+## Cas d'utilisation
+
+- Authentification à deux facteurs (2FA)
+- Vérification de numéro de téléphone
+- Réinitialisation de mot de passe
+- Validation de transactions sensibles
+- Connexion sécurisée aux applications

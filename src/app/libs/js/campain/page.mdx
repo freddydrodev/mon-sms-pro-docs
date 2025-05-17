@@ -1,33 +1,74 @@
 ---
-title: Messages
+sidebarTitle: Campagnes SMS 📨
+title: Gestion des Campagnes SMS | SDK JavaScript Mon SMS PRO
+description: Guide complet pour créer et gérer vos campagnes SMS avec notre SDK JavaScript. Envoyez des messages personnalisés, gérez les destinataires et optimisez vos communications SMS.
+keywords: campagnes SMS, envoi SMS, messages SMS, JavaScript SMS, API SMS, TypeScript SMS, SMS personnalisés, encodage SMS, segmentation SMS
 ---
 
 import { Callout, Table } from "nextra/components";
 
-## Introduction
+# Gestion des Campagnes SMS
 
-Les messages SMS utilisent le service de messagerie courte pour la transmission, avec une limite de caractères basée sur l'encodage. L'alphabet GSM-7 permet 160 caractères, tandis que l'encodage UCS-2 limite à 70 caractères en raison des caractères spéciaux. Les messages dépassant ces limites sont segmentés, chaque segment réduisant le nombre de caractères disponibles à 153 pour GSM-7. Surveiller la longueur des messages est crucial pour éviter des coûts supplémentaires.
+Les campagnes SMS vous permettent d'envoyer des messages personnalisés à un groupe de destinataires. Notre SDK offre une solution complète pour créer et gérer vos campagnes, avec support pour les messages standards, programmés et répétés.
+
+## Fonctionnalités
+
+- Envoi de messages personnalisés
+- Support des messages programmés
+- Support des messages répétés
+- Gestion des groupes de destinataires
+- Personnalisation des expéditeurs
+- Suivi des campagnes
+
+## Types de campagnes
+
+Notre API supporte plusieurs types de campagnes :
+
+1. **Campagnes standards** : Envoi immédiat de messages
+2. **Campagnes programmées** : Envoi à une date et heure précises
+3. **Campagnes répétées** : Envoi récurrent selon un planning défini
+
+## Limites des messages
+
+Les SMS sont soumis à des limites de caractères selon l'encodage utilisé :
+
+- **GSM-7** : 160 caractères par message
+- **UCS-2** : 70 caractères par message (pour les caractères spéciaux)
+- **Messages longs** : Segmentation automatique (153 caractères par segment)
 
 <Callout type="warning" emoji="⚠️">
-  N'oubliez pas de mettre l'index du pays sans le **(+)** avant le numéro du
-  destinataire.
+  Important : Incluez l'indicatif du pays sans le symbole **(+)** avant le
+  numéro de téléphone. Exemple : "22500000000" pour un numéro ivoirien.
 </Callout>
 
 ## Utilisation
 
-Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
-vous pouvez utiliser la propriété `campain` de votre variable.
+Après avoir [initialisé](/libs/js/get-started/#init) votre bibliothèque, vous pouvez utiliser la propriété `campain` pour gérer vos campagnes SMS.
 
-```ts filename="/api/campain" showLineNumbers {1,6-10}
+### Création d'une campagne
+
+```ts filename="/api/campain" showLineNumbers {1,6-22}
 import { sms } from "@/libs/sms";
 
 const createCampain = async () => {
   try {
-    // Create a new campaign with specified contacts, message text, and sender ID
+    // Création d'une nouvelle campagne avec contacts, message et expéditeur
     const res = await sms.campain.create({
-      contacts: [{ phone: "22500000000" }, { phone: "2250101010101" }],
+      contacts: [
+        // saved contact
+        {
+          id: "contact_1",
+          phone: "22500000000",
+          name: "John Doe",
+        },
+        // new contact (will be saved if number does not exist)
+        {
+          phone: "2250101010101",
+        },
+      ],
+      groupsIds: ["group_1", "group_2"], // will add groups contacts to the campain
       text: "Bonjour @nom_complet bon début de semaine.",
-      senderId: "My Sender",
+      senderId: "My Sender", // will go if active or will use the default sender
     });
 
     console.log(res);
@@ -37,9 +78,89 @@ const createCampain = async () => {
 };
 ```
 
-## Propriétés
+### Création d'une campagne programmée
+
+```ts filename="/api/campain/scheduled" showLineNumbers {1,6-18}
+import { sms } from "@/libs/sms";
+
+const createScheduledCampain = async () => {
+  try {
+    // Création d'une campagne programmée
+    const res = await sms.campain.create({
+      contacts: [
+        {
+          id: "contact_1",
+          phone: "22500000000",
+          name: "John Doe",
+        },
+      ],
+      text: "Rappel : Votre rendez-vous est demain à 10h.",
+      senderId: "My Sender",
+      type: "SCHEDULED",
+      scheduledDate: new Date("2024-03-20T10:00:00Z"), // checking date and time
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+<Callout type="warning" emoji="⚠️">
+  Important : Les dates programmées doivent être des multiples de 15 minutes.
+  Par exemple : 10:00, 10:15, 10:30, 10:45.
+</Callout>
+
+### Création d'une campagne répétée
+
+```ts filename="/api/campain/recurring" showLineNumbers {1,6-22}
+import { sms } from "@/libs/sms";
+
+const createRecurringCampain = async () => {
+  try {
+    // Création d'une campagne répétée
+    const res = await sms.campain.create({
+      contacts: [
+        {
+          id: "contact_1",
+          phone: "22500000000",
+          name: "John Doe",
+        },
+      ],
+      text: "Rappel hebdomadaire : N'oubliez pas votre séance.",
+      senderId: "My Sender",
+      type: "RECURRING",
+      recurring: {
+        monday: new Date("2024-03-18T09:00:00Z"), // checking day and time, not the date
+        wednesday: new Date("2024-03-20T09:00:00Z"), // checking day and time, not the date
+        friday: new Date("2024-03-22T09:00:00Z"), // checking day and time, not the date
+      },
+    });
+
+    console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+```
+
+<Callout type="warning" emoji="⚠️">
+  Important : Les heures de répétition doivent être des multiples de 15 minutes.
+  Par exemple : 09:00, 09:15, 09:30, 09:45.
+</Callout>
+
+<Callout type="info">
+  La variable `sms` est l'instance initialisée de notre SDK. Elle fournit la
+  méthode `create` pour lancer de nouvelles campagnes SMS avec des options de
+  personnalisation avancées.
+</Callout>
+
+## Documentation de l'API
 
 ### sms.campain.create
+
+Crée une nouvelle campagne SMS avec les paramètres spécifiés.
 
 <Table style={{ marginTop: 20 }}>
   <thead>
@@ -53,51 +174,136 @@ const createCampain = async () => {
   </thead>
   <tbody>
     <Table.Tr>
+      <Table.Td>name</Table.Td>
+      <Table.Td>Nom de la campagne</Table.Td>
+      <Table.Td>Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
       <Table.Td>contacts</Table.Td>
-      <Table.Td>Array de numéros de téléphone du destinataire</Table.Td>
+      <Table.Td>Liste des contacts destinataires</Table.Td>
       <Table.Td>Array de Contact Object</Table.Td>
       <Table.Td>Non</Table.Td>
       <Table.Td>{[]}</Table.Td>
     </Table.Tr>
     <Table.Tr>
+      <Table.Td>groupsIds</Table.Td>
+      <Table.Td>Liste des identifiants de groupes</Table.Td>
+      <Table.Td>Array de Texte</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>[]</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
       <Table.Td>text</Table.Td>
-      <Table.Td>Texte du message</Table.Td>
+      <Table.Td>Contenu du message</Table.Td>
       <Table.Td>Texte</Table.Td>
       <Table.Td>Non</Table.Td>
       <Table.Td>{""}</Table.Td>
     </Table.Tr>
     <Table.Tr>
       <Table.Td>senderId</Table.Td>
-      <Table.Td>Identifiant du nom de l'expéditeur</Table.Td>
+      <Table.Td>Identifiant de l'expéditeur</Table.Td>
       <Table.Td>Texte</Table.Td>
-      <Table.Td>Non</Table.Td>
+      <Table.Td>Oui</Table.Td>
       <Table.Td>{""}</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>groupsIds</Table.Td>
-      <Table.Td>Array d'identifiants de groupes</Table.Td>
-      <Table.Td>Array de Texte</Table.Td>
-      <Table.Td>Oui</Table.Td>
-      <Table.Td>[]</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
       <Table.Td>type</Table.Td>
-      <Table.Td>Type de message</Table.Td>
-      <Table.Td>"SMS", "FLASH"</Table.Td>
+      <Table.Td>Type de campagne</Table.Td>
+      <Table.Td>"SMS" | "SCHEDULED" | "RECURRING"</Table.Td>
       <Table.Td>Oui</Table.Td>
       <Table.Td>SMS</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>forceSenderId</Table.Td>
-      <Table.Td>
-        Si vous devez utiliser un nom de l'expéditeur dans le message lorsqu'il n'est pas encore validé par les opérateurs.
-      </Table.Td>
-      <Table.Td>Boolean</Table.Td>
+      <Table.Td>scheduledDate</Table.Td>
+      <Table.Td>Date de programmation (pour type SCHEDULED)</Table.Td>
+      <Table.Td>Date</Table.Td>
       <Table.Td>Oui</Table.Td>
-      <Table.Td>false</Table.Td>
+      <Table.Td>undefined</Table.Td>
     </Table.Tr>
-
+    <Table.Tr>
+      <Table.Td>recurring</Table.Td>
+      <Table.Td>Configuration des répétitions (pour type RECURRING)</Table.Td>
+      <Table.Td>Object</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>undefined</Table.Td>
+    </Table.Tr>
   </tbody>
 </Table>
 
-Plus de détails sur la structure de l'objet contact [ici](/libs/js/contact#intro).
+### Structure des contacts
+
+```ts
+type Contact = {
+  id?: string; // Identifiant unique du contact (optionnel)
+  phone: string; // Numéro de téléphone (format: 22500000000)
+  name?: string; // Nom complet du contact (optionnel)
+  firstName?: string; // Prénom du contact (optionnel)
+  lastName?: string; // Nom de famille du contact (optionnel)
+  sex?: "M" | "F"; // Genre du contact (optionnel)
+};
+```
+
+<Callout type="info">
+  Seul le numéro de téléphone (`phone`) est obligatoire. Tous les autres champs
+  sont optionnels. Si un contact n'existe pas, il sera automatiquement créé avec
+  les informations fournies.
+</Callout>
+
+### Configuration des répétitions
+
+```ts
+type RecurringConfig = {
+  monday?: Date;
+  tuesday?: Date;
+  wednesday?: Date;
+  thursday?: Date;
+  friday?: Date;
+  saturday?: Date;
+  sunday?: Date;
+};
+```
+
+## Bonnes pratiques
+
+1. **Longueur des messages** : Respectez les limites de caractères
+2. **Personnalisation** : Utilisez les variables disponibles (@nom_complet, etc.)
+3. **Expéditeur** : Choisissez un senderId reconnu
+4. **Test** : Vérifiez vos messages avant envoi
+5. **Segmentation** : Évitez les messages trop longs
+6. **Programmation** : Vérifiez les fuseaux horaires pour les campagnes programmées
+7. **Répétitions** : Testez les campagnes répétées sur un petit groupe
+8. **Intervalles** : Utilisez des intervalles de 15 minutes pour les campagnes programmées et répétées
+
+## Cas d'utilisation
+
+- Campagnes marketing
+- Notifications clients
+- Alertes et rappels
+- Communications internes
+- Service client
+- Rappels de rendez-vous
+- Alertes de sécurité
+
+## FAQ
+
+### Comment personnaliser mes messages ?
+
+Utilisez les variables comme @nom_complet dans votre texte pour personnaliser automatiquement chaque message.
+
+### Comment gérer les messages longs ?
+
+Les messages dépassant la limite de caractères sont automatiquement segmentés, chaque segment étant facturé séparément.
+
+### Puis-je envoyer à des groupes ?
+
+Oui, utilisez le paramètre `groupsIds` pour envoyer à des groupes de contacts prédéfinis.
+
+### Comment programmer une campagne ?
+
+Utilisez le type "SCHEDULED" avec le paramètre `scheduledDate` pour définir la date et l'heure d'envoi.
+
+### Comment créer une campagne répétée ?
+
+Utilisez le type "RECURRING" avec le paramètre `recurring` pour définir les jours et heures de répétition.

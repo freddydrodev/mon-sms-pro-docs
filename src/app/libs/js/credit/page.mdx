@@ -1,23 +1,37 @@
 ---
-title: Crédits
+sidebarTitle: Gestion des Crédits 💰
+title: Gestion des Crédits SMS | SDK JavaScript Mon SMS PRO
+description: Guide complet pour gérer vos crédits SMS avec notre SDK JavaScript. Surveillez votre solde, comprenez les tarifs et gérez efficacement vos dépenses SMS.
+keywords: crédits SMS, solde SMS, tarifs SMS, JavaScript SMS, API SMS, TypeScript SMS, recharge SMS, message flash, coût SMS, gestion crédits
 ---
 
 import { Callout, Table } from "nextra/components";
 
-## Introduction
+# Gestion des Crédits SMS
 
-Les crédits représentent le solde disponible sur votre compte pour envoyer des SMS. Chaque message envoyé déduit un certain montant de votre solde en fonction des tarifs appliqués. Il est important de surveiller votre balance de crédits pour vous assurer que votre compte dispose de suffisamment de fonds pour les opérations prévues.
+Les crédits sont l'unité de compte utilisée pour gérer votre solde SMS. Chaque message envoyé consomme un certain nombre de crédits en fonction du type de message et des tarifs appliqués. Une gestion efficace de vos crédits est essentielle pour assurer la continuité de vos services SMS.
+
+## Fonctionnalités
+
+- Vérification du solde en temps réel
+- Suivi des dépenses par message
+- Différenciation des tarifs selon le type de message
+- Alertes de solde bas
+- Historique des transactions
+
+## Tarification
 
 <Callout type="info" emoji="ℹ️">
-  Assurez-vous de recharger votre compte avant que votre solde ne soit épuisé
-  pour éviter toute interruption de service. 1 crédit vaut en moyen $0.04 soit
-  25F CFA. Les Message Flash utilise plus de crédits que les SMS.
+  Notre système de crédits propose deux options : un pack d'essai de 10 SMS à
+  250 FCFA et un pack standard facturé entre 16-20 FCFA par crédit selon le
+  volume.
 </Callout>
 
 ## Utilisation
 
-Après avoir [Initialisé](/libs/js/get-started/#init) votre bibliothèque.
-vous pouvez utiliser la propriété `user` de votre variable.
+Après avoir [initialisé](/libs/js/get-started/#init) votre bibliothèque, vous pouvez utiliser la propriété `user` pour gérer vos crédits.
+
+### Vérification du solde
 
 ```ts filename="/api/credit" showLineNumbers {1,5}
 import { sms } from "@/libs/sms";
@@ -33,8 +47,48 @@ const getCredit = async () => {
 };
 ```
 
-## Propriétés
+<Callout type="warning" emoji="⚠️">
+  Important : Surveillez régulièrement votre solde et rechargez votre compte
+  avant qu'il ne soit épuisé pour éviter toute interruption de service.
+</Callout>
+
+## Documentation de l'API
 
 ### sms.user.credit
 
-Cette méthode ne recoit aucun argument.
+Récupère le solde actuel de votre compte en crédits.<br />
+_Cette méthode ne reçoit aucun argument._
+
+## Bonnes pratiques
+
+1. **Surveillance** : Vérifiez régulièrement votre solde
+2. **Recharge** : Planifiez vos recharges à l'avance
+3. **Budget** : Estimez vos besoins mensuels
+4. **Optimisation** : Choisissez le type de message approprié
+5. **Alertes** : Configurez des notifications de solde bas
+
+## Cas d'utilisation
+
+- Suivi des dépenses SMS
+- Planification budgétaire
+- Gestion des campagnes
+- Contrôle des coûts
+- Optimisation des dépenses
+
+## FAQ
+
+### Comment recharger mon compte ?
+
+Vous pouvez recharger votre compte via l'application mobile Mon SMS PRO ou en contactant notre service client sur [WhatsApp](https://wa.me/2250708517414).
+
+### Les crédits expirent-ils ?
+
+Non, les crédits n'expirent pas et restent disponibles tant que votre compte est actif.
+
+### Comment sont calculés les coûts ?
+
+Un crédit équivaut à une page SMS. Une page SMS contient jusqu'à 160 caractères avec l'encodage GSM-7, ou 70 caractères avec l'encodage UCS-2 (utilisé pour les caractères spéciaux).
+
+### Puis-je obtenir un remboursement ?
+
+Les crédits achetés ne sont pas remboursables.

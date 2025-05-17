@@ -2,8 +2,9 @@ const meta = {
   "get-started": {},
   otp: {},
   sender: {},
-  campain: {},
   contact: {},
+  group: {},
+  campain: {},
   credit: {},
 };
 
