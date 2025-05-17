@@ -27,32 +27,69 @@ Après avoir [initialisé](/libs/rest/get-started/#init) votre API, vous pouvez 
 ### Envoi d'un code OTP
 
 ```bash
-POST /v1/otp/send
+POST /v1/auth/otp/get
 Content-Type: application/json
 
 {
-  "apiKey": "YOUR_API_KEY",
-  "phone": "22500000000",
-  "length": 6,
+  "apiKey": "YOUR_API_KEY",      // Required
+  "phoneNumber": "+2250708517414", // Required: Include country code with +
+  "length": 10,                  // Optional: Length of the OTP code
+  "mode": "ALPHA_NUMERIC",       // Optional: "NUMERIC" | "ALPHABET" | "ALPHA_NUMERIC"
+  "senderId": "Boss",            // Optional: Custom sender ID
+  "appName": "My APP"            // Optional: Application name
+}
+```
+
+#### Réponse
+
+```json
+{
+  "success": true,
+  "data": {
+    "token": "6828f2299df4397112837d20",
+    "status": "PENDING",
+    "phoneNumber": "2250708517414"
+  },
+  "error": null
 }
 ```
 
 ### Vérification d'un code OTP
 
 ```bash
-POST /v1/otp/verify
+POST /v1/auth/otp/verify
 Content-Type: application/json
 
 {
-  "apiKey": "YOUR_API_KEY",
-  "phone": "22500000000",
-  "code": "123456"
+  "apiKey": "YOUR_API_KEY",      // Required
+  "phoneNumber": "2250708517414", // Required: Include country code without +
+  "token": "6828f2299df4397112837d20", // Required: Token received from OTP generation
+  "otp": "5ZAEZ0Z8G5A"           // Required: OTP code to verify
 }
 ```
 
+#### Réponse
+
+```json
+{
+  "success": true,
+  "data": {
+    "token": "6828f2299df4397112837d20",
+    "status": "VERIFIED",
+    "phoneNumber": "2250708517414"
+  },
+  "error": null
+}
+```
+
+<Callout type="info">
+  Toutes les réponses de l'API suivent le format standard : `{ success: boolean, data: any, error: any }`.
+  Le champ `data` contient les données de la réponse, tandis que `error` contient les détails en cas d'erreur.
+</Callout>
+
 ## Documentation de l'API
 
-### POST /v1/otp/send
+### POST /v1/auth/otp/get
 
 Envoie un code OTP au numéro de téléphone spécifié.
 
@@ -75,42 +112,51 @@ Envoie un code OTP au numéro de téléphone spécifié.
       <Table.Td>-</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>phone</Table.Td>
-      <Table.Td>Numéro de téléphone</Table.Td>
+      <Table.Td>phoneNumber</Table.Td>
+      <Table.Td>Numéro de téléphone avec indicatif pays</Table.Td>
       <Table.Td>String</Table.Td>
       <Table.Td>Non</Table.Td>
       <Table.Td>-</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>message</Table.Td>
-      <Table.Td>Message personnalisé</Table.Td>
+      <Table.Td>length</Table.Td>
+      <Table.Td>Longueur du code OTP</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>4</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>mode</Table.Td>
+      <Table.Td>Mode du code OTP</Table.Td>
+      <Table.Td>"NUMERIC" | "ALPHABET" | "ALPHA_NUMERIC"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>NUMERIC</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>senderId</Table.Td>
+      <Table.Td>
+        Identifiant de l'expéditeur (Doit être enregistré et actif)
+      </Table.Td>
       <Table.Td>String</Table.Td>
       <Table.Td>Oui</Table.Td>
-      <Table.Td>"Votre code de vérification est : @code"</Table.Td>
+      <Table.Td>MONSMSPRO</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>length</Table.Td>
-      <Table.Td>Longueur du code</Table.Td>
-      <Table.Td>Number</Table.Td>
+      <Table.Td>appName</Table.Td>
+      <Table.Td>Nom de l'application</Table.Td>
+      <Table.Td>String</Table.Td>
       <Table.Td>Oui</Table.Td>
-      <Table.Td>6</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>expiry</Table.Td>
-      <Table.Td>Durée de validité (secondes)</Table.Td>
-      <Table.Td>Number</Table.Td>
-      <Table.Td>Oui</Table.Td>
-      <Table.Td>300</Table.Td>
+      <Table.Td>null</Table.Td>
     </Table.Tr>
   </tbody>
 </Table>
 
 <Callout type="warning" emoji="⚠️">
   Important : Incluez l'indicatif du pays sans le symbole **(+)** avant le
-  numéro de téléphone. Exemple : "22500000000" pour un numéro ivoirien.
+  numéro de téléphone. Exemple : "2250708517414" pour un numéro ivoirien.
 </Callout>
 
-### POST /v1/otp/verify
+### POST /v1/auth/otp/verify
 
 Vérifie un code OTP pour un numéro de téléphone.
 
@@ -133,14 +179,21 @@ Vérifie un code OTP pour un numéro de téléphone.
       <Table.Td>-</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>phone</Table.Td>
-      <Table.Td>Numéro de téléphone</Table.Td>
+      <Table.Td>phoneNumber</Table.Td>
+      <Table.Td>Numéro de téléphone avec indicatif pays</Table.Td>
       <Table.Td>String</Table.Td>
       <Table.Td>Non</Table.Td>
       <Table.Td>-</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>code</Table.Td>
+      <Table.Td>token</Table.Td>
+      <Table.Td>Token reçu lors de la génération de l'OTP</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>otp</Table.Td>
       <Table.Td>Code OTP à vérifier</Table.Td>
       <Table.Td>String</Table.Td>
       <Table.Td>Non</Table.Td>
@@ -149,16 +202,25 @@ Vérifie un code OTP pour un numéro de téléphone.
   </tbody>
 </Table>
 
+### Exemple d'erreur
+
+```json
+{
+  "success": false,
+  "data": null,
+  "error": "wrong-otp"
+}
+```
+
 ## Bonnes pratiques
 
-1. **Longueur du code** : Utilisez des codes de 6 chiffres pour un bon équilibre sécurité/confort
-2. **Expiration** : Définissez une durée de validité appropriée (5-10 minutes)
-3. **Messages** : Personnalisez les messages pour votre application
+1. **Longueur du code** : Utilisez des codes de 4-10 caractères pour un bon équilibre sécurité/confort
+2. **Mode** : Choisissez le mode approprié selon vos besoins de sécurité
+3. **Expéditeur** : Utilisez un senderId reconnu pour une meilleure délivrabilité
 4. **Tentatives** : Limitez le nombre de tentatives de vérification
 5. **Sécurité** : Utilisez HTTPS pour toutes les requêtes
 6. **Stockage** : Ne stockez jamais les codes en clair
-7. **Nettoyage** : Supprimez les codes expirés
-8. **Monitoring** : Surveillez les tentatives de fraude
+7. **Monitoring** : Surveillez les tentatives de fraude
 
 ## Cas d'utilisation
 
@@ -174,19 +236,15 @@ Vérifie un code OTP pour un numéro de téléphone.
 
 ### Comment envoyer un code OTP ?
 
-Utilisez l'endpoint `/v1/otp/send` avec le numéro de téléphone et les paramètres souhaités.
+Utilisez l'endpoint `/v1/auth/otp/get` avec le numéro de téléphone et les paramètres requis.
 
-### Comment personnaliser le message OTP ?
+### Quels modes de code sont disponibles ?
 
-Utilisez le paramètre `message` avec la variable `@code` pour le code de vérification.
-
-### Quelle est la durée de validité d'un code OTP ?
-
-Par défaut, un code est valide pendant 5 minutes (300 secondes). Vous pouvez modifier cette durée avec le paramètre `expiry`.
+Trois modes sont disponibles : "NUMERIC" (chiffres uniquement), "ALPHABET" (lettres uniquement), et "ALPHA_NUMERIC" (chiffres et lettres).
 
 ### Comment vérifier un code OTP ?
 
-Utilisez l'endpoint `/v1/otp/verify` avec le numéro de téléphone et le code à vérifier.
+Utilisez l'endpoint `/v1/auth/otp/verify` avec le numéro de téléphone et le code à vérifier.
 
 ### Combien de tentatives sont autorisées ?
 
@@ -195,3 +253,7 @@ Le nombre de tentatives est limité pour des raisons de sécurité. Contactez-no
 ### Puis-je réutiliser un code OTP ?
 
 Non, chaque code OTP est à usage unique et ne peut être utilisé qu'une seule fois.
+
+### Comment personnaliser l'expéditeur ?
+
+Utilisez le paramètre `senderId` pour spécifier un expéditeur personnalisé.

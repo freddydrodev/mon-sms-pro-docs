@@ -1,9 +1,9 @@
 export default {
   "get-started": {},
-  campain: {},
+  otp: {},
+  sender: {},
   contact: {},
   group: {},
-  sender: {},
-  otp: {},
+  campain: {},
   credit: {},
 };
