@@ -1,0 +1,212 @@
+---
+sidebarTitle: Contacts 📱
+title: Gestion des Contacts | API REST Mon SMS PRO
+description: Guide complet pour gérer vos contacts avec notre API REST. Créez, listez et supprimez des contacts pour vos campagnes SMS.
+keywords: contacts SMS, API REST contacts, gestion contacts, API SMS, endpoints contacts, contacts personnalisés
+---
+
+import { Callout, Table } from "nextra/components";
+
+# Gestion des Contacts
+
+Les contacts sont les destinataires de vos campagnes SMS. Notre API REST vous permet de gérer facilement votre carnet d'adresses avec des fonctionnalités complètes de création, listing et suppression.
+
+## Fonctionnalités
+
+- Création de contacts
+- Listing des contacts
+- Suppression de contacts
+- Détails des contacts
+- Gestion des informations personnelles
+- Support multilingue (nom, prénom, etc.)
+
+## Utilisation
+
+Après avoir [initialisé](/libs/rest/get-started/#init) votre API, vous pouvez utiliser les endpoints suivants pour gérer vos contacts.
+
+### Création d'un contact
+
+```bash
+POST /v1/contact/create
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "phone": "22500000000",
+  "sex": "M"
+}
+```
+
+### Liste des contacts
+
+```bash
+POST /v1/contact/list
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+}
+```
+
+### Suppression d'un contact ou de plusieurs contacts
+
+```bash
+POST /v1/contact/delete
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "contactsIds": ["contact_1", "contact_2"]
+}
+```
+
+### Détails d'un contact
+
+```bash
+POST /v1/contact/[id]
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "id": "contact_1"
+}
+```
+
+## Documentation de l'API
+
+### POST /v1/contact/create
+
+Crée un nouveau contact avec les informations spécifiées.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>apiKey</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>phone</Table.Td>
+      <Table.Td>Numéro de téléphone</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>sex</Table.Td>
+      <Table.Td>Genre</Table.Td>
+      <Table.Td>"M" | "F"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+<Callout type="warning" emoji="⚠️">
+  Important : Incluez l'indicatif du pays sans le symbole **(+)** avant le
+  numéro de téléphone. Exemple : "22500000000" pour un numéro ivoirien.
+</Callout>
+
+### POST /v1/contact/list
+
+Récupère la liste des contacts avec pagination et tri.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>apiKey</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>orderBy</Table.Td>
+      <Table.Td>Champ de tri</Table.Td>
+      <Table.Td>"firstName" | "lastName" | "phone" | "createdAt"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>createdAt</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>page</Table.Td>
+      <Table.Td>Numéro de page</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>1</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>limit</Table.Td>
+      <Table.Td>Nombre d'éléments par page</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>10</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+## Bonnes pratiques
+
+1. **Numéros de téléphone** : Utilisez toujours le format international sans le symbole +
+2. **Informations complètes** : Remplissez tous les champs disponibles pour une meilleure personnalisation
+3. **Organisation** : Utilisez des groupes pour organiser vos contacts
+4. **Mise à jour** : Maintenez vos contacts à jour
+5. **Validation** : Vérifiez la validité des numéros de téléphone
+6. **Doublons** : Évitez les doublons dans votre base de contacts
+7. **Sécurité** : Protégez les informations personnelles de vos contacts
+8. **Export** : Sauvegardez régulièrement votre base de contacts
+
+## Cas d'utilisation
+
+- Gestion de carnet d'adresses
+- Segmentation de clientèle
+- Campagnes marketing
+- Notifications clients
+- Service client
+- Rappels et alertes
+- Communications internes
+
+## FAQ
+
+### Comment formater les numéros de téléphone ?
+
+Les numéros doivent être au format international sans le symbole +. Exemple : "22500000000" pour un numéro ivoirien.
+
+### Puis-je importer des contacts en masse ?
+
+Oui, vous pouvez créer plusieurs contacts en une seule requête en utilisant un tableau de contacts.
+
+### Comment gérer les doublons ?
+
+Le système vérifie automatiquement les doublons basés sur le numéro de téléphone. Si un contact existe déjà, il sera mis à jour avec les nouvelles informations.
+
+### Comment organiser mes contacts ?
+
+Vous pouvez utiliser les groupes pour organiser vos contacts par catégorie, projet ou campagne.
+
+### Comment supprimer un contact ?
+
+Utilisez l'endpoint `/v1/contact/delete` avec l'ID du contact à supprimer.
+
+### Comment récupérer les détails d'un contact ?
+
+Utilisez l'endpoint `/v1/contact/[id]` avec l'ID du contact pour obtenir ses informations complètes.

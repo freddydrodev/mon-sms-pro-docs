@@ -1,0 +1,230 @@
+---
+sidebarTitle: Groupes 👥
+title: Gestion des Groupes | API REST Mon SMS PRO
+description: Guide complet pour gérer vos groupes de contacts avec notre API REST. Créez, listez et gérez vos groupes pour organiser vos campagnes SMS.
+keywords: groupes SMS, API REST groupes, gestion groupes, API SMS, endpoints groupes, organisation contacts
+---
+
+import { Callout, Table } from "nextra/components";
+
+# Gestion des Groupes
+
+Les groupes vous permettent d'organiser vos contacts pour faciliter l'envoi de campagnes SMS ciblées. Notre API REST offre des fonctionnalités complètes pour créer et gérer vos groupes de contacts.
+
+## Fonctionnalités
+
+- Création de groupes
+- Listing des groupes
+- Détails des groupes
+- Gestion des contacts dans les groupes
+- Organisation des campagnes
+- Segmentation de clientèle
+
+## Utilisation
+
+Après avoir [initialisé](/libs/rest/get-started/#init) votre API, vous pouvez utiliser les endpoints suivants pour gérer vos groupes.
+
+### Création d'un groupe
+
+```bash
+POST /v1/group/create
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "name": "Clients Premium",
+  "description": "Groupe des clients premium",
+  "contacts": [
+    {
+      "id": "contact_1",
+      "phone": "22500000000",
+      "sex": "M"
+    },
+    {
+      "phone": "2250101010101"
+    }
+  ]
+}
+```
+
+### Liste des groupes
+
+```bash
+POST /v1/group/list
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "orderBy": "createdAt",
+  "page": 1,
+  "limit": 10
+}
+```
+
+### Détails d'un groupe
+
+```bash
+POST /v1/group/[id]
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "id": "group_1"
+}
+```
+
+## Documentation de l'API
+
+### POST /v1/group/create
+
+Crée un nouveau groupe avec les contacts spécifiés.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>key</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>name</Table.Td>
+      <Table.Td>Nom du groupe</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>description</Table.Td>
+      <Table.Td>Description du groupe</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>contacts</Table.Td>
+      <Table.Td>Liste des contacts</Table.Td>
+      <Table.Td>Array of Contact Object</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>[]</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### Structure des contacts dans un groupe
+
+```json
+{
+  "id": "string", // Identifiant unique du contact (optionnel)
+  "phone": "string", // Numéro de téléphone (format: 22500000000)
+  "sex": "M" | "F" // Genre du contact (optionnel)
+}
+```
+
+<Callout type="warning" emoji="⚠️">
+  Important : Incluez l'indicatif du pays sans le symbole **(+)** avant le
+  numéro de téléphone. Exemple : "22500000000" pour un numéro ivoirien.
+</Callout>
+
+### POST /v1/group/list
+
+Récupère la liste des groupes avec pagination et tri.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>key</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>orderBy</Table.Td>
+      <Table.Td>Champ de tri</Table.Td>
+      <Table.Td>"name" | "createdAt"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>createdAt</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>page</Table.Td>
+      <Table.Td>Numéro de page</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>1</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>limit</Table.Td>
+      <Table.Td>Nombre d'éléments par page</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>10</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+## Bonnes pratiques
+
+1. **Nommage** : Utilisez des noms de groupes clairs et descriptifs
+2. **Organisation** : Créez une structure logique de groupes
+3. **Description** : Ajoutez des descriptions détaillées
+4. **Contacts** : Vérifiez les contacts avant de les ajouter
+5. **Mise à jour** : Maintenez vos groupes à jour
+6. **Sécurité** : Protégez les informations des groupes
+7. **Archivage** : Archivez les groupes inactifs
+8. **Documentation** : Documentez la structure de vos groupes
+
+## Cas d'utilisation
+
+- Segmentation de clientèle
+- Campagnes marketing ciblées
+- Notifications par catégorie
+- Gestion de projets
+- Communications internes
+- Service client
+- Rappels et alertes
+
+## FAQ
+
+### Comment créer un groupe ?
+
+Utilisez l'endpoint `/v1/group/create` avec un nom et une liste de contacts.
+
+### Comment ajouter des contacts à un groupe ?
+
+Vous pouvez ajouter des contacts lors de la création du groupe ou en mettant à jour un groupe existant.
+
+### Comment lister mes groupes ?
+
+Utilisez l'endpoint `/v1/group/list` avec les paramètres de pagination et de tri.
+
+### Comment obtenir les détails d'un groupe ?
+
+Utilisez l'endpoint `/v1/group/[id]` avec l'ID du groupe.
+
+### Puis-je modifier un groupe existant ?
+
+Oui, vous pouvez mettre à jour les informations d'un groupe existant.
+
+### Comment organiser mes groupes ?
+
+Créez une structure hiérarchique de groupes pour une meilleure organisation.

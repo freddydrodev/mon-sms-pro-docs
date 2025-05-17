@@ -1,0 +1,321 @@
+---
+sidebarTitle: Campagnes SMS 📨
+title: Gestion des Campagnes SMS | API REST Mon SMS PRO
+description: Guide complet pour créer et gérer vos campagnes SMS avec notre API REST. Envoyez des messages personnalisés, gérez les destinataires et optimisez vos communications SMS via des requêtes HTTP.
+keywords: campagnes SMS, API REST SMS, envoi SMS, messages SMS, API SMS, endpoints SMS, SMS personnalisés, encodage SMS, segmentation SMS
+---
+
+import { Callout, Table } from "nextra/components";
+
+# Gestion des Campagnes SMS
+
+Les campagnes SMS vous permettent d'envoyer des messages personnalisés à un groupe de destinataires. Notre API REST offre une solution complète pour créer et gérer vos campagnes, avec support pour les messages standards, programmés et répétés.
+
+## Fonctionnalités
+
+- Envoi de messages personnalisés
+- Support des messages programmés
+- Support des messages répétés
+- Gestion des groupes de destinataires
+- Personnalisation des expéditeurs
+- Suivi des campagnes
+
+## Types de campagnes
+
+Notre API supporte plusieurs types de campagnes :
+
+1. **Campagnes standards** : Envoi immédiat de messages
+2. **Campagnes programmées** : Envoi à une date et heure précises
+3. **Campagnes répétées** : Envoi récurrent selon un planning défini
+
+## Limites des messages
+
+Les SMS sont soumis à des limites de caractères selon l'encodage utilisé :
+
+- **GSM-7** : 160 caractères par message
+- **UCS-2** : 70 caractères par message (pour les caractères spéciaux)
+- **Messages longs** : Segmentation automatique (153 caractères par segment)
+
+<Callout type="warning" emoji="⚠️">
+  Important : Incluez l'indicatif du pays sans le symbole **(+)** avant le
+  numéro de téléphone. Exemple : "22500000000" pour un numéro ivoirien.
+</Callout>
+
+## Utilisation
+
+Après avoir [initialisé](/libs/rest/get-started/#init) votre API, vous pouvez utiliser les endpoints suivants pour gérer vos campagnes SMS.
+
+### Création d'une campagne
+
+```bash
+POST /v1/campaign/create
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "name": "Ma campagne",
+  "contacts": [
+    {
+      "id": "contact_1",
+      "phone": "22500000000",
+      "sex": "M"
+    },
+    {
+      "phone": "2250101010101"
+    }
+  ],
+  "groupsIds": ["group_1", "group_2"],
+  "text": "Bonjour !",
+  "senderId": "My Sender",
+  "type": "SMS"
+}
+```
+
+### Création d'une campagne programmée
+
+```bash
+POST /v1/campaign/scheduled
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "name": "Rappel rendez-vous",
+  "contacts": [
+    {
+      "id": "contact_1",
+      "phone": "22500000000",
+      "name": "John Doe"
+    }
+  ],
+  "groupsIds": ["group_1"],
+  "text": "Rappel : Votre rendez-vous est demain à 10h.",
+  "senderId": "My Sender",
+  "type": "SCHEDULED",
+  "scheduledDate": "2024-03-20T10:00:00Z"
+}
+```
+
+<Callout type="warning" emoji="⚠️">
+  Important : Les dates programmées doivent être des multiples de 15 minutes.
+  Par exemple : 10:00, 10:15, 10:30, 10:45.
+</Callout>
+
+### Création d'une campagne répétée
+
+```bash
+POST /v1/campaign/recurring
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "name": "Rappel hebdomadaire",
+  "contacts": [
+    {
+      "id": "contact_1",
+      "phone": "22500000000",
+    }
+  ],
+  "groupsIds": ["group_1"],
+  "text": "Rappel hebdomadaire : N'oubliez pas votre séance.",
+  "senderId": "My Sender",
+  "type": "RECURRING",
+  "recurring": {
+    "monday": "2024-03-18T09:00:00Z",
+    "wednesday": "2024-03-20T09:00:00Z",
+    "friday": "2024-03-22T09:00:00Z"
+  }
+}
+```
+
+<Callout type="warning" emoji="⚠️">
+  Important : Les heures de répétition doivent être des multiples de 15 minutes.
+  Par exemple : 09:00, 09:15, 09:30, 09:45.
+</Callout>
+
+## Documentation de l'API
+
+### POST /v1/campaign/create
+
+Crée une nouvelle campagne SMS avec les paramètres spécifiés.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>key</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>name</Table.Td>
+      <Table.Td>Nom de la campagne</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>contacts</Table.Td>
+      <Table.Td>Liste des contacts destinataires</Table.Td>
+      <Table.Td>Array of Contact Object</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{[]}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>groupsIds</Table.Td>
+      <Table.Td>Liste des identifiants de groupes</Table.Td>
+      <Table.Td>Array of String</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>[]</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>text</Table.Td>
+      <Table.Td>Contenu du message</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>senderId</Table.Td>
+      <Table.Td>Identifiant de l'expéditeur</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>{""}</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>type</Table.Td>
+      <Table.Td>Type de campagne</Table.Td>
+      <Table.Td>"SMS" | "FLASH" | "SCHEDULED" | "RECURRING"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>SMS</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### Structure des contacts
+
+```json
+{
+  "id": "string",
+  "phone": "string",
+  "name": "string",
+  "firstName": "string",
+  "lastName": "string",
+  "sex": "M" | "F"
+}
+```
+
+<Callout type="info">
+  Seul le numéro de téléphone (`phone`) est obligatoire. Tous les autres champs
+  sont optionnels. Si un contact n'existe pas, il sera automatiquement créé avec
+  les informations fournies.
+</Callout>
+
+## Liste des campagnes
+
+Vous pouvez récupérer la liste de vos campagnes avec leurs détails de base.
+
+```bash
+POST /v1/campaign/list
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+}
+```
+
+### Paramètres de la liste
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>key</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>orderBy</Table.Td>
+      <Table.Td>Champ de tri</Table.Td>
+      <Table.Td>"firstName" | "lastName" | "phone" | "createdAt"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>createdAt</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>page</Table.Td>
+      <Table.Td>Numéro de page</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>1</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>limit</Table.Td>
+      <Table.Td>Nombre d'éléments par page</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>10</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+## Bonnes pratiques
+
+1. **Longueur des messages** : Respectez les limites de caractères
+2. **Personnalisation** : Utilisez les variables disponibles (@nom_complet, etc.)
+3. **Expéditeur** : Choisissez un senderId reconnu
+4. **Test** : Vérifiez vos messages avant envoi
+5. **Segmentation** : Évitez les messages trop longs
+6. **Programmation** : Vérifiez les fuseaux horaires pour les campagnes programmées
+7. **Répétitions** : Testez les campagnes répétées sur un petit groupe
+8. **Intervalles** : Utilisez des intervalles de 15 minutes pour les campagnes programmées et répétées
+
+## Cas d'utilisation
+
+- Campagnes marketing
+- Notifications clients
+- Alertes et rappels
+- Communications internes
+- Service client
+- Rappels de rendez-vous
+- Alertes de sécurité
+
+## FAQ
+
+### Comment personnaliser mes messages ?
+
+Utilisez les variables comme @name dans votre texte pour personnaliser automatiquement chaque message.
+
+### Comment gérer les messages longs ?
+
+Les messages dépassant la limite de caractères sont automatiquement segmentés, chaque segment étant facturé séparément.
+
+### Puis-je envoyer à des groupes ?
+
+Oui, utilisez le paramètre `groupsIds` pour envoyer à des groupes de contacts prédéfinis.
+
+### Comment programmer une campagne ?
+
+Utilisez le type "SCHEDULED" avec le paramètre `scheduledDate` pour définir la date et l'heure d'envoi.
+
+### Comment créer une campagne répétée ?
+
+Utilisez le type "RECURRING" avec le paramètre `recurring` pour définir les jours et heures de répétition.

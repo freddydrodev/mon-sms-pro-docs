@@ -1,0 +1,288 @@
+---
+sidebarTitle: Expéditeurs 📤
+title: Gestion des Expéditeurs | API REST Mon SMS PRO
+description: Guide complet pour gérer vos expéditeurs SMS avec notre API REST. Créez, listez et gérez vos expéditeurs via des requêtes HTTP.
+keywords: expéditeurs SMS, API REST expéditeurs, sender ID, API SMS, endpoints expéditeurs, gestion expéditeurs
+---
+
+import { Callout, Table } from "nextra/components";
+
+# Gestion des Expéditeurs
+
+Les expéditeurs (sender ID) sont les identifiants qui apparaissent comme expéditeur de vos messages SMS. Notre API REST vous permet de créer et gérer vos expéditeurs.
+
+## Fonctionnalités
+
+- Création d'expéditeurs
+- Liste des expéditeurs
+- Détails des expéditeurs
+- Gestion des statuts
+- Personnalisation des communications
+- Suivi des expéditeurs
+
+## Utilisation
+
+Après avoir [initialisé](/libs/rest/get-started/#init) votre API, vous pouvez utiliser les endpoints suivants pour gérer vos expéditeurs.
+
+### Création d'un expéditeur
+
+```bash
+POST /v1/sender/create
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",     // Required
+  "length": 11,                 // Required: Length of the sender ID
+  "phoneNumber": "22500000000", // Required: Your phone number
+  "mode": "ALPHA_NUMERIC",      // Required: "NUMERIC" | "ALPHABET" | "ALPHA_NUMERIC"
+  "adminKey": "ADMIN_KEY",      // Optional: Admin key for verification
+  "senderId": "MySender",       // Optional: Custom sender ID
+  "appName": "MyApp"            // Optional: Application name
+}
+```
+
+#### Réponse
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "sender_123",
+    "name": "MySender",
+    "status": "PENDING",
+    "createdAt": "2024-03-20T10:00:00Z"
+  },
+  "error": null
+}
+```
+
+### Liste des expéditeurs
+
+```bash
+POST /v1/sender/list
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY", // Required
+  "orderBy": "createdAt",   // Optional: "createdAt" | "name"
+  "page": 1,                // Optional: defaults to 1
+  "limit": 10               // Optional: defaults to 10
+}
+```
+
+#### Réponse
+
+```json
+{
+  "success": true,
+  "data": {
+    "senders": [
+      {
+        "id": "sender_123",
+        "name": "MySender",
+        "status": "ACCEPTED",
+        "createdAt": "2024-03-20T10:00:00Z"
+      }
+    ],
+    "pagination": {
+      "total": 100,
+      "page": 1,
+      "limit": 10,
+      "pages": 10
+    }
+  },
+  "error": null
+}
+```
+
+<Callout type="warning" emoji="⚠️">
+  Important : Le nom de l'expéditeur doit être entre 3 et 11 caractères et ne
+  peut contenir que des caractères alphanumériques.
+</Callout>
+
+<Callout type="info">
+  Toutes les réponses de l'API suivent le format standard : `{ success: boolean, data: any, error: any }`.
+  Le champ `data` contient les données de la réponse, tandis que `error` contient les détails en cas d'erreur.
+</Callout>
+
+## Documentation de l'API
+
+### POST /v1/sender/create
+
+Crée un nouvel expéditeur avec les paramètres spécifiés.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>apiKey</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>length</Table.Td>
+      <Table.Td>Longueur de l'expéditeur</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>phoneNumber</Table.Td>
+      <Table.Td>Numéro de téléphone</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>mode</Table.Td>
+      <Table.Td>Mode de l'expéditeur</Table.Td>
+      <Table.Td>"NUMERIC" | "ALPHABET" | "ALPHA_NUMERIC"</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>adminKey</Table.Td>
+      <Table.Td>Clé d'administration</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>senderId</Table.Td>
+      <Table.Td>Identifiant personnalisé</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>appName</Table.Td>
+      <Table.Td>Nom de l'application</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### POST /v1/sender/list
+
+Récupère la liste des expéditeurs avec pagination et tri.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>apiKey</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>orderBy</Table.Td>
+      <Table.Td>Champ de tri</Table.Td>
+      <Table.Td>"createdAt" | "name"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>createdAt</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>page</Table.Td>
+      <Table.Td>Numéro de page</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>1</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>limit</Table.Td>
+      <Table.Td>Nombre d'éléments par page</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>10</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### Statuts possibles
+
+- **PENDING** : En attente de validation
+- **SUBMITTED** : Soumis pour validation
+- **ACCEPTED** : Validé et actif
+- **REFUSED** : Refusé
+
+### Exemple d'erreur
+
+```json
+{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "INVALID_SENDER_NAME",
+    "message": "Le nom de l'expéditeur doit être entre 3 et 11 caractères"
+  }
+}
+```
+
+## Bonnes pratiques
+
+1. **Nommage** : Choisissez des noms clairs et professionnels
+2. **Longueur** : Respectez la limite de 3-11 caractères
+3. **Caractères** : Utilisez uniquement des caractères alphanumériques
+4. **Sécurité** : Protégez votre clé API
+5. **Validation** : Vérifiez le statut de vos expéditeurs
+6. **Backup** : Gardez plusieurs expéditeurs actifs
+7. **Monitoring** : Surveillez les taux de livraison
+8. **Conformité** : Respectez les règles d'envoi
+
+## Cas d'utilisation
+
+- Communications marketing
+- Notifications clients
+- Alertes et rappels
+- Service client
+- Communications internes
+- Rappels de rendez-vous
+- Alertes de sécurité
+
+## FAQ
+
+### Comment créer un expéditeur ?
+
+Utilisez l'endpoint `/v1/sender/create` avec les paramètres requis.
+
+### Quelles sont les règles de nommage ?
+
+Le nom doit être entre 3 et 11 caractères et ne peut contenir que des caractères alphanumériques.
+
+### Comment lister mes expéditeurs ?
+
+Utilisez l'endpoint `/v1/sender/list` pour obtenir la liste de vos expéditeurs.
+
+### Comment vérifier le statut ?
+
+Le statut est inclus dans la réponse de création et de liste.
+
+### Combien d'expéditeurs puis-je avoir ?
+
+Le nombre d'expéditeurs dépend de votre forfait. Contactez-nous pour plus d'informations.
+
+### Comment modifier un expéditeur ?
+
+Les expéditeurs ne peuvent pas être modifiés une fois créés. Créez-en un nouveau si nécessaire.

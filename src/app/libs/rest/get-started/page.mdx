@@ -1,45 +1,181 @@
 ---
-title: Premiers pas
-description: Guide détaillé pour intégrer et utiliser l'API REST Mon SMS PRO. Découvrez comment envoyer des SMS, gérer vos contacts et automatiser vos communications.
-keywords: API SMS, REST API, envoi SMS, SMS marketing, SMS professionnel, intégration SMS, API Mon SMS PRO
+sidebarTitle: Démarrage 🚀
+title: Guide de Démarrage | API REST Mon SMS PRO
+description: Guide complet pour commencer à utiliser notre API REST SMS. Apprenez à configurer, authentifier et envoyer vos premiers messages SMS.
+keywords: API REST SMS, guide démarrage, documentation API, envoi SMS, configuration API, authentification API
 ---
 
-import { Callout } from "nextra/components";
+import { Callout, Table } from "nextra/components";
 
-# Guide d'intégration de l'API REST Mon SMS PRO
+# Guide de Démarrage
 
-L'API REST Mon SMS PRO est une solution professionnelle puissante permettant d'intégrer facilement l'envoi de SMS dans vos applications. Ce guide complet vous accompagnera pas à pas dans l'intégration et l'utilisation de notre API.
+Bienvenue dans la documentation de l'API REST Mon SMS PRO. Ce guide vous aidera à configurer et utiliser notre API pour envoyer des SMS.
 
-## Qu'est-ce que l'API REST Mon SMS PRO ?
+## Prérequis
 
-Mon SMS PRO propose une API (Interface de Programmation d'Applications) moderne et robuste qui établit un pont sécurisé entre votre application et notre plateforme d'envoi de SMS professionnels. Notre API suit les standards de l'industrie pour garantir une intégration fluide et une communication fiable.
+- Un compte Mon SMS PRO
+- Une clé API valide
+- Un environnement de développement
+- Un client HTTP (cURL, Postman, etc.)
 
-## Une architecture REST optimisée pour les développeurs
+## Installation
 
-Notre API repose sur l'architecture REST (Representational State Transfer), reconnue comme standard dans l'industrie. Pour simplifier l'expérience développeur, nous avons optimisé notre API en utilisant uniquement la méthode **POST** pour toutes les opérations.
+Notre API REST ne nécessite pas d'installation de package. Vous pouvez l'utiliser directement avec n'importe quel client HTTP.
 
-L'URL de base de notre API est : `https://rest.monsms.pro/v1`
+### Configuration de l'environnement
 
-### Les avantages de notre API REST :
+```bash
+# URL de base de l'API
+BASE_URL="https://rest.monsms.pro"
 
-- **Intégration simplifiée** : Interface HTTP unifiée et intuitive
-- **Performance optimale** : Architecture stateless pour une scalabilité maximale
-- **Compatibilité universelle** : Réponses au format JSON standardisé
-- **Sécurité maximale** : Authentification robuste et communications chiffrées
+# Votre clé API
+YOUR_API_KEY="your_api_key_here"
+```
 
-## Fonctionnalités principales
+## Authentification
 
-Notre API vous permet de :
+Toutes les requêtes à l'API nécessitent une clé API valide. Incluez votre clé API dans le corps de chaque requête.
 
-- **Gestion des contacts** : Création, modification, suppression et organisation de contacts individuels
-- **Gestion des groupes** : Administration complète des groupes de contacts pour une meilleure segmentation
-- **Campagnes SMS** : Création et gestion de campagnes SMS ponctuelles, programmées ou récurrentes
-- **Identifiants d'expéditeur** : Configuration et gestion des noms d'expéditeur personnalisés
-- **[Authentification OTP](/libs/rest/features/otp)** : Envoi et vérification de codes à usage unique pour sécuriser l'accès aux applications
-- **Suivi et rapports** : Accès aux statistiques détaillées et historique des envois
+```bash
+POST /v1/any-endpoint
+Content-Type: application/json
 
-Toutes ces fonctionnalités sont accessibles via une interface REST cohérente, permettant une intégration rapide et efficace dans votre stack technologique.
+{
+  "apiKey": "YOUR_API_KEY",
+  // autres paramètres...
+}
+```
 
-## Sécurité
+<Callout type="warning" emoji="⚠️">
+  Important : Ne partagez jamais votre clé API. Gardez-la en sécurité et
+  utilisez des variables d'environnement.
+</Callout>
 
-Pour des raisons de sécurité, il est fortement recommandé de stocker votre clé API dans des variables d'environnement plutôt que de la coder en dur dans votre application. Utilisez un fichier `.env` à la racine de votre projet pour gérer vos variables d'environnement.
+## Premier message
+
+Voici un exemple simple pour envoyer votre premier SMS :
+
+```bash
+POST /v1/campaign/create
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "contacts": [
+    {
+      "phone": "22500000000"
+    }
+  ],
+  "text": "Bonjour ! Ceci est mon premier message via l'API REST Mon SMS PRO.",
+  "type": "SMS"
+}
+```
+
+## Structure des réponses
+
+Toutes les réponses de l'API suivent le même format :
+
+```json
+{
+  "success": boolean,
+  "data": any,
+  "error": any
+}
+```
+
+### Codes de statut HTTP
+
+- **200** : Succès
+- **200** : Requête invalide
+- **200** : Non authentifié
+- **200** : Non autorisé
+- **200** : Ressource non trouvée
+- **200** : Trop de requêtes
+- **200** : Erreur serveur
+
+## Bonnes pratiques
+
+1. **Sécurité** : Protégez votre clé API
+2. **Gestion des erreurs** : Implémentez une gestion robuste des erreurs
+3. **Rate limiting** : Respectez les limites de requêtes
+4. **Validation** : Validez les données avant l'envoi
+5. **Logging** : Gardez une trace des requêtes
+6. **Monitoring** : Surveillez les performances
+7. **Backup** : Ayez un plan de secours
+8. **Documentation** : Documentez votre implémentation
+
+## Exemples d'utilisation
+
+### Envoi d'un SMS simple
+
+```bash
+curl -X POST https://rest.monsms.pro/v1/campaign/create \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiKey": "YOUR_API_KEY",
+    "contacts": [
+      {
+        "phone": "22500000000"
+      }
+    ],
+    "text": "Bonjour !",
+    "type": "SMS"
+  }'
+```
+
+### Création d'un contact
+
+```bash
+curl -X POST https://rest.monsms.pro/v1/contact/create \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiKey": "YOUR_API_KEY",
+    "phone": "22500000000",
+  }'
+```
+
+### Création d'un groupe
+
+```bash
+curl -X POST https://rest.monsms.pro/v1/group/create \
+  -H "Content-Type: application/json" \
+  -d '{
+    "apiKey": "YOUR_API_KEY",
+    "name": "Mes Contacts",
+    "description": "Groupe de contacts principaux",
+    "contacts": [
+      {
+        "phone": "22500000000"
+      }
+      {
+        "phone": "22500000001"
+      }
+    ]
+  }'
+```
+
+## FAQ
+
+### Comment obtenir une clé API ?
+
+Connectez-vous à votre compte Mon SMS PRO et accédez à la section API pour générer une clé.
+
+### Quelles sont les limites de l'API ?
+
+Les limites dépendent de votre forfait. Contactez-nous pour plus d'informations.
+
+### Comment gérer les erreurs ?
+
+Vérifiez le code de statut HTTP et le message d'erreur dans la réponse.
+
+### Puis-je tester l'API ?
+
+Oui, nous fournissons un environnement de test. Contactez-nous pour obtenir les accès.
+
+### Comment suivre mes messages ?
+
+Utilisez l'endpoint `/v1/campaign/list` pour suivre vos campagnes.
+
+### Comment mettre à jour ma clé API ?
+
+Vous pouvez générer une nouvelle clé API à tout moment depuis votre compte.
