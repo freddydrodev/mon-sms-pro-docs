@@ -74,7 +74,7 @@ Content-Type: application/json
 ### Création d'une campagne programmée
 
 ```bash
-POST /v1/campaign/scheduled
+POST /v1/campaign/create
 Content-Type: application/json
 
 {
@@ -91,7 +91,7 @@ Content-Type: application/json
   "text": "Rappel : Votre rendez-vous est demain à 10h.",
   "senderId": "My Sender",
   "type": "SCHEDULED",
-  "scheduledDate": "2024-03-20T10:00:00Z"
+  "scheduledDate": "2024-03-20T10:00:00Z" // Date et heure d'envoi de la campagne
 }
 ```
 
@@ -103,7 +103,7 @@ Content-Type: application/json
 ### Création d'une campagne répétée
 
 ```bash
-POST /v1/campaign/recurring
+POST /v1/campaign/create
 Content-Type: application/json
 
 {
@@ -120,16 +120,17 @@ Content-Type: application/json
   "senderId": "My Sender",
   "type": "RECURRING",
   "recurring": {
-    "monday": "2024-03-18T09:00:00Z",
-    "wednesday": "2024-03-20T09:00:00Z",
-    "friday": "2024-03-22T09:00:00Z"
+    "monday": "2024-03-18T09:00:00Z", // Jour et heure de l'envoi de la campagne
+    "wednesday": "2024-03-20T09:00:00Z", // Jour et heure de l'envoi de la campagne
+    "friday": "2024-03-22T09:00:00Z" // Jour et heure de l'envoi de la campagne
   }
 }
 ```
 
 <Callout type="warning" emoji="⚠️">
   Important : Les heures de répétition doivent être des multiples de 15 minutes.
-  Par exemple : 09:00, 09:15, 09:30, 09:45.
+  Par exemple : 09:00, 09:15, 09:30, 09:45. La date n'a pas d'importance, c'est
+  la heure qui compte.
 </Callout>
 
 ## Documentation de l'API
@@ -194,7 +195,7 @@ Crée une nouvelle campagne SMS avec les paramètres spécifiés.
     <Table.Tr>
       <Table.Td>type</Table.Td>
       <Table.Td>Type de campagne</Table.Td>
-      <Table.Td>"SMS" | "FLASH" | "SCHEDULED" | "RECURRING"</Table.Td>
+      <Table.Td>"SMS" | "SCHEDULED" | "RECURRING"</Table.Td>
       <Table.Td>Oui</Table.Td>
       <Table.Td>SMS</Table.Td>
     </Table.Tr>
@@ -230,6 +231,31 @@ Content-Type: application/json
 
 {
   "apiKey": "YOUR_API_KEY",
+}
+```
+
+#### Réponse
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "6826f4b75393b60866510ab9",
+      "name": "[SMS du 16/4/2025 à 8:17]",
+      "text": "test msg",
+      "type": "SMS",
+      "scheduledDate": null,
+      "createdAt": "2025-05-16T08:17:59.608Z",
+      "contactCount": 1,
+      "senderIdId": null,
+      "userId": "6825b3719d7998c64a253cc1"
+    }
+  ],
+  "totalCount": 1,
+  "count": 1,
+  "page": 1,
+  "totalPage": 1
 }
 ```
 
