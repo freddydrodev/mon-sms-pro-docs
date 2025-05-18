@@ -32,12 +32,8 @@ Content-Type: application/json
 
 {
   "apiKey": "YOUR_API_KEY",     // Required
-  "length": 11,                 // Required: Length of the sender ID
-  "phoneNumber": "22500000000", // Required: Your phone number
-  "mode": "ALPHA_NUMERIC",      // Required: "NUMERIC" | "ALPHABET" | "ALPHA_NUMERIC"
-  "adminKey": "ADMIN_KEY",      // Optional: Admin key for verification
-  "senderId": "MySender",       // Optional: Custom sender ID
-  "appName": "MyApp"            // Optional: Application name
+  "name": "MySender",           // Required: Name of the sender ID
+  "description": "My custom sender ID for marketing campaigns" // Required: Description of the sender ID
 }
 ```
 
@@ -47,10 +43,11 @@ Content-Type: application/json
 {
   "success": true,
   "data": {
-    "id": "sender_123",
+    "id": "6828f5f79df4397112837d22",
     "name": "MySender",
+    "description": "My custom sender ID for marketing campaigns",
     "status": "PENDING",
-    "createdAt": "2024-03-20T10:00:00Z"
+    "createdAt": "2025-05-17T20:47:51.320Z"
   },
   "error": null
 }
@@ -63,10 +60,11 @@ POST /v1/sender/list
 Content-Type: application/json
 
 {
-  "apiKey": "YOUR_API_KEY", // Required
-  "orderBy": "createdAt",   // Optional: "createdAt" | "name"
-  "page": 1,                // Optional: defaults to 1
-  "limit": 10               // Optional: defaults to 10
+  "apiKey": "YOUR_API_KEY",     // Required
+  "sort": "asc",                // Optional: "asc" | "desc"
+  "orderBy": "createdAt",       // Optional: "name" | "createdAt"
+  "count": 10,                  // Optional: Number of items per page
+  "page": 1                     // Optional: Page number
 }
 ```
 
@@ -75,23 +73,20 @@ Content-Type: application/json
 ```json
 {
   "success": true,
-  "data": {
-    "senders": [
-      {
-        "id": "sender_123",
-        "name": "MySender",
-        "status": "ACCEPTED",
-        "createdAt": "2024-03-20T10:00:00Z"
-      }
-    ],
-    "pagination": {
-      "total": 100,
-      "page": 1,
-      "limit": 10,
-      "pages": 10
+  "data": [
+    {
+      "id": "6828f5f79df4397112837d22",
+      "name": "MySender",
+      "description": "My custom sender ID for marketing campaigns",
+      "status": "PENDING",
+      "createdAt": "2025-05-17T20:47:51.320Z"
     }
-  },
-  "error": null
+  ],
+  "error": null,
+  "totalCount": 1,
+  "count": 1,
+  "page": 1,
+  "totalPage": 1
 }
 ```
 
@@ -104,6 +99,31 @@ Content-Type: application/json
   Toutes les réponses de l'API suivent le format standard : `{ success: boolean, data: any, error: any }`.
   Le champ `data` contient les données de la réponse, tandis que `error` contient les détails en cas d'erreur.
 </Callout>
+
+### Liste des Messages d'un Expéditeur
+
+```bash
+POST /v1/sender/[id]/campaign // [id] est l'id de l'expéditeur
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",     // Required
+}
+```
+
+#### Réponse
+
+```json
+{
+  {
+    "success": true,
+    "data": [], // Liste des campagnes
+    "totalCount": 0,
+    "count": 0,
+    "error": null
+}
+}
+```
 
 ## Documentation de l'API
 
@@ -130,46 +150,18 @@ Crée un nouvel expéditeur avec les paramètres spécifiés.
       <Table.Td>-</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>length</Table.Td>
-      <Table.Td>Longueur de l'expéditeur</Table.Td>
-      <Table.Td>Number</Table.Td>
-      <Table.Td>Non</Table.Td>
-      <Table.Td>-</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>phoneNumber</Table.Td>
-      <Table.Td>Numéro de téléphone</Table.Td>
+      <Table.Td>name</Table.Td>
+      <Table.Td>Nom de l'expéditeur</Table.Td>
       <Table.Td>String</Table.Td>
       <Table.Td>Non</Table.Td>
       <Table.Td>-</Table.Td>
     </Table.Tr>
     <Table.Tr>
-      <Table.Td>mode</Table.Td>
-      <Table.Td>Mode de l'expéditeur</Table.Td>
-      <Table.Td>"NUMERIC" | "ALPHABET" | "ALPHA_NUMERIC"</Table.Td>
+      <Table.Td>description</Table.Td>
+      <Table.Td>Description de l'expéditeur</Table.Td>
+      <Table.Td>String</Table.Td>
       <Table.Td>Non</Table.Td>
       <Table.Td>-</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>adminKey</Table.Td>
-      <Table.Td>Clé d'administration</Table.Td>
-      <Table.Td>String</Table.Td>
-      <Table.Td>Oui</Table.Td>
-      <Table.Td>null</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>senderId</Table.Td>
-      <Table.Td>Identifiant personnalisé</Table.Td>
-      <Table.Td>String</Table.Td>
-      <Table.Td>Oui</Table.Td>
-      <Table.Td>null</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>appName</Table.Td>
-      <Table.Td>Nom de l'application</Table.Td>
-      <Table.Td>String</Table.Td>
-      <Table.Td>Oui</Table.Td>
-      <Table.Td>null</Table.Td>
     </Table.Tr>
   </tbody>
 </Table>
@@ -197,11 +189,25 @@ Récupère la liste des expéditeurs avec pagination et tri.
       <Table.Td>-</Table.Td>
     </Table.Tr>
     <Table.Tr>
+      <Table.Td>sort</Table.Td>
+      <Table.Td>Ordre de tri</Table.Td>
+      <Table.Td>"asc" | "desc"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>desc</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
       <Table.Td>orderBy</Table.Td>
       <Table.Td>Champ de tri</Table.Td>
-      <Table.Td>"createdAt" | "name"</Table.Td>
+      <Table.Td>"name" | "createdAt"</Table.Td>
       <Table.Td>Oui</Table.Td>
       <Table.Td>createdAt</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>count</Table.Td>
+      <Table.Td>Nombre d'éléments par page</Table.Td>
+      <Table.Td>Number</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>10</Table.Td>
     </Table.Tr>
     <Table.Tr>
       <Table.Td>page</Table.Td>
@@ -210,12 +216,30 @@ Récupère la liste des expéditeurs avec pagination et tri.
       <Table.Td>Oui</Table.Td>
       <Table.Td>1</Table.Td>
     </Table.Tr>
+  </tbody>
+</Table>
+
+### POST /v1/sender/[id]/campaign // [id] est l'id de l'expéditeur
+
+Récupère la liste des campagnes d'un expéditeur.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
     <Table.Tr>
-      <Table.Td>limit</Table.Td>
-      <Table.Td>Nombre d'éléments par page</Table.Td>
-      <Table.Td>Number</Table.Td>
-      <Table.Td>Oui</Table.Td>
-      <Table.Td>10</Table.Td>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>apiKey</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
     </Table.Tr>
   </tbody>
 </Table>
@@ -233,10 +257,7 @@ Récupère la liste des expéditeurs avec pagination et tri.
 {
   "success": false,
   "data": null,
-  "error": {
-    "code": "INVALID_SENDER_NAME",
-    "message": "Le nom de l'expéditeur doit être entre 3 et 11 caractères"
-  }
+  "error": "sender-not-found"
 }
 ```
 
@@ -274,6 +295,10 @@ Le nom doit être entre 3 et 11 caractères et ne peut contenir que des caractè
 ### Comment lister mes expéditeurs ?
 
 Utilisez l'endpoint `/v1/sender/list` pour obtenir la liste de vos expéditeurs.
+
+### Comment lister les campagnes d'un expéditeur ?
+
+Utilisez l'endpoint `/v1/sender/[id]/campaign` pour obtenir la liste des campagnes associées à un expéditeur spécifique.
 
 ### Comment vérifier le statut ?
 

@@ -32,8 +32,45 @@ Content-Type: application/json
 
 {
   "apiKey": "YOUR_API_KEY",
-  "phone": "22500000000",
-  "sex": "M"
+  "contacts": [
+      {
+          "name": "Freddy Dro", // Optional: Name of the contact
+          "phone": "2250708517414", // Required: Phone number of the contact
+          "sex": "M" // Optional: Sex of the contact
+      },
+      {
+          "phone": "2250505050505", // Required: Phone number of the contact
+      },
+  ]
+}
+```
+
+#### Réponse
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "6829f8169df4397112837d23",
+      "name": "Freddy Dro",
+      "firstName": null,
+      "lastName": null,
+      "phone": "2250708517414",
+      "sex": "M",
+      "createdAt": "2025-05-18T15:09:10.032Z"
+    },
+    {
+      "id": "6829f8169df4397112837d24",
+      "name": "2250505050505",
+      "firstName": null,
+      "lastName": null,
+      "phone": "2250505050505",
+      "sex": null,
+      "createdAt": "2025-05-18T15:09:10.292Z"
+    }
+  ],
+  "error": null
 }
 ```
 
@@ -48,6 +85,98 @@ Content-Type: application/json
 }
 ```
 
+#### Réponse
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "6829f8169df4397112837d24",
+      "name": "2250505050505",
+      "firstName": null,
+      "lastName": null,
+      "phone": "2250505050505",
+      "sex": null,
+      "createdAt": "2025-05-18T15:09:10.292Z"
+    },
+    {
+      "id": "6829f8169df4397112837d23",
+      "name": "Freddy Dro",
+      "firstName": null,
+      "lastName": null,
+      "phone": "2250708517414",
+      "sex": "M",
+      "createdAt": "2025-05-18T15:09:10.032Z"
+    }
+  ],
+  "totalCount": 2,
+  "count": 2,
+  "page": 1,
+  "totalPage": 1
+}
+```
+
+### Détails d'un contact
+
+```bash
+POST /v1/contact/[id] // [id] est l'id du contact
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "id": "6829f8169df4397112837d24"
+}
+```
+
+#### Réponse
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "6829f8169df4397112837d24",
+    "name": "2250505050505",
+    "firstName": null,
+    "lastName": null,
+    "phone": "2250505050505",
+    "sex": null,
+    "createdAt": "2025-05-18T15:09:10.292Z"
+  }
+}
+```
+
+### Modification d'un contact
+
+```bash
+POST /v1/contact/[id]/update // [id] est l'id du contact
+Content-Type: application/json
+
+{
+  "apiKey": "YOUR_API_KEY",
+  "firstName": "John",
+  "lastName": "Doe",
+  "sex": "M"
+}
+```
+
+#### Réponse
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "6829f8169df4397112837d24",
+    "name": "John Doe",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phone": "2250505050505",
+    "sex": "M",
+    "updatedAt": "2025-05-18T15:09:10.292Z"
+  }
+}
+```
+
 ### Suppression d'un contact ou de plusieurs contacts
 
 ```bash
@@ -56,19 +185,18 @@ Content-Type: application/json
 
 {
   "apiKey": "YOUR_API_KEY",
-  "contactsIds": ["contact_1", "contact_2"]
+  "contactsIds": ["6829f8169df4397112837d24", "6829f8169df4397112837d23"]
 }
 ```
 
-### Détails d'un contact
+#### Réponse
 
-```bash
-POST /v1/contact/[id]
-Content-Type: application/json
-
+```json
 {
-  "apiKey": "YOUR_API_KEY",
-  "id": "contact_1"
+  "success": true,
+  "data": {
+    "count": 2
+  }
 }
 ```
 
@@ -97,6 +225,29 @@ Crée un nouveau contact avec les informations spécifiées.
       <Table.Td>-</Table.Td>
     </Table.Tr>
     <Table.Tr>
+      <Table.Td>contacts</Table.Td>
+      <Table.Td>Liste des contacts à créer</Table.Td>
+      <Table.Td>Array</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+#### Structure d'un contact
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
       <Table.Td>phone</Table.Td>
       <Table.Td>Numéro de téléphone</Table.Td>
       <Table.Td>String</Table.Td>
@@ -104,11 +255,32 @@ Crée un nouveau contact avec les informations spécifiées.
       <Table.Td>-</Table.Td>
     </Table.Tr>
     <Table.Tr>
+      <Table.Td>name</Table.Td>
+      <Table.Td>Nom complet du contact</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>firstName</Table.Td>
+      <Table.Td>Prénom du contact</Table.Td>
+      <Table.Td>String | null</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>lastName</Table.Td>
+      <Table.Td>Nom de famille du contact</Table.Td>
+      <Table.Td>String | null</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
       <Table.Td>sex</Table.Td>
-      <Table.Td>Genre</Table.Td>
+      <Table.Td>Genre du contact</Table.Td>
       <Table.Td>"M" | "F"</Table.Td>
       <Table.Td>Oui</Table.Td>
-      <Table.Td>-</Table.Td>
+      <Table.Td>null</Table.Td>
     </Table.Tr>
   </tbody>
 </Table>
@@ -164,28 +336,156 @@ Récupère la liste des contacts avec pagination et tri.
   </tbody>
 </Table>
 
+### POST /v1/contact/[id]
+
+Récupère les détails d'un contact spécifique.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>apiKey</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>id</Table.Td>
+      <Table.Td>Identifiant du contact</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### POST /v1/contact/[id]/update
+
+Modifie les informations d'un contact existant.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>apiKey</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>phone</Table.Td>
+      <Table.Td>Numéro de téléphone du contact</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>name</Table.Td>
+      <Table.Td>Nom complet du contact</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>firstName</Table.Td>
+      <Table.Td>Prénom du contact</Table.Td>
+      <Table.Td>String | null</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>lastName</Table.Td>
+      <Table.Td>Nom de famille du contact</Table.Td>
+      <Table.Td>String | null</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>sex</Table.Td>
+      <Table.Td>Genre du contact</Table.Td>
+      <Table.Td>"M" | "F"</Table.Td>
+      <Table.Td>Oui</Table.Td>
+      <Table.Td>null</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
+### POST /v1/contact/delete
+
+Supprime un ou plusieurs contacts.
+
+<Table style={{ marginTop: 20 }}>
+  <thead>
+    <Table.Tr>
+      <Table.Th>Nom</Table.Th>
+      <Table.Th>Description</Table.Th>
+      <Table.Th>Type</Table.Th>
+      <Table.Th>Facultatif</Table.Th>
+      <Table.Th>Valeur par défaut</Table.Th>
+    </Table.Tr>
+  </thead>
+  <tbody>
+    <Table.Tr>
+      <Table.Td>apiKey</Table.Td>
+      <Table.Td>Clé API</Table.Td>
+      <Table.Td>String</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+    <Table.Tr>
+      <Table.Td>contactsIds</Table.Td>
+      <Table.Td>Liste des identifiants des contacts à supprimer</Table.Td>
+      <Table.Td>String[]</Table.Td>
+      <Table.Td>Non</Table.Td>
+      <Table.Td>-</Table.Td>
+    </Table.Tr>
+  </tbody>
+</Table>
+
 ## Bonnes pratiques
 
-1. **Numéros de téléphone** : Utilisez toujours le format international sans le symbole +
-2. **Informations complètes** : Remplissez tous les champs disponibles pour une meilleure personnalisation
-3. **Organisation** : Utilisez des groupes pour organiser vos contacts
-4. **Mise à jour** : Maintenez vos contacts à jour
-5. **Validation** : Vérifiez la validité des numéros de téléphone
-6. **Doublons** : Évitez les doublons dans votre base de contacts
-7. **Sécurité** : Protégez les informations personnelles de vos contacts
-8. **Export** : Sauvegardez régulièrement votre base de contacts
+1. **Numéros de téléphone** : Utilisez toujours le format international sans le symbole +. Le numéro de téléphone est le seul champ obligatoire pour créer un contact.
+2. **Informations personnelles** : Utilisez les champs `firstName` et `lastName` pour une meilleure organisation des contacts.
+3. **Nom complet** : Le champ `name` est optionnel et peut être utilisé comme alias ou nom d'affichage.
+4. **Genre** : Utilisez le champ `sex` avec les valeurs "M" ou "F" pour une meilleure segmentation.
+5. **Validation** : Vérifiez la validité des numéros de téléphone avant l'envoi.
+6. **Doublons** : Le système vérifie automatiquement les doublons basés sur le numéro de téléphone.
+7. **Sécurité** : Protégez les informations personnelles de vos contacts.
+8. **Mise à jour** : Maintenez vos contacts à jour en utilisant l'endpoint de mise à jour.
 
 ## Cas d'utilisation
 
-- Gestion de carnet d'adresses
-- Segmentation de clientèle
-- Campagnes marketing
-- Notifications clients
-- Service client
-- Rappels et alertes
-- Communications internes
+- Gestion de carnet d'adresses avec informations personnelles complètes
+- Segmentation de clientèle par genre et nom
+- Campagnes marketing personnalisées
+- Notifications clients avec nom personnalisé
+- Service client avec historique des contacts
+- Rappels et alertes nominatifs
+- Communications internes avec profils complets
 
 ## FAQ
+
+### Quels sont les champs obligatoires pour créer un contact ?
+
+Seul le numéro de téléphone (`phone`) est obligatoire. Tous les autres champs (`name`, `firstName`, `lastName`, `sex`) sont optionnels.
 
 ### Comment formater les numéros de téléphone ?
 
@@ -193,15 +493,15 @@ Les numéros doivent être au format international sans le symbole +. Exemple : 
 
 ### Puis-je importer des contacts en masse ?
 
-Oui, vous pouvez créer plusieurs contacts en une seule requête en utilisant un tableau de contacts.
+Oui, vous pouvez créer plusieurs contacts en une seule requête en utilisant un tableau de contacts. Chaque contact doit avoir au minimum un numéro de téléphone.
 
 ### Comment gérer les doublons ?
 
 Le système vérifie automatiquement les doublons basés sur le numéro de téléphone. Si un contact existe déjà, il sera mis à jour avec les nouvelles informations.
 
-### Comment organiser mes contacts ?
+### Comment mettre à jour les informations d'un contact ?
 
-Vous pouvez utiliser les groupes pour organiser vos contacts par catégorie, projet ou campagne.
+Utilisez l'endpoint `/v1/contact/[id]/update` avec les champs que vous souhaitez modifier (`name`, `firstName`, `lastName`, `sex`).
 
 ### Comment supprimer un contact ?
 
@@ -209,4 +509,4 @@ Utilisez l'endpoint `/v1/contact/delete` avec l'ID du contact à supprimer.
 
 ### Comment récupérer les détails d'un contact ?
 
-Utilisez l'endpoint `/v1/contact/[id]` avec l'ID du contact pour obtenir ses informations complètes.
+Utilisez l'endpoint `/v1/contact/[id]` avec l'ID du contact pour obtenir ses informations complètes, y compris tous les champs personnels.
