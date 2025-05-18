@@ -27,7 +27,7 @@ Après avoir [initialisé](/libs/rest/get-started/#init) votre API, vous pouvez 
 ### Consultation du solde
 
 ```bash
-POST /v1/credit/balance
+POST /v1/user/credit
 Content-Type: application/json
 
 {
@@ -40,57 +40,13 @@ Content-Type: application/json
 ```json
 {
   "success": true,
-  "data": {
-    "balance": 1000,
-    "currency": "XOF"
-  },
-  "error": null
-}
-```
-
-### Liste des transactions
-
-```bash
-POST /v1/credit/transactions
-Content-Type: application/json
-
-{
-  "apiKey": "YOUR_API_KEY", // Required
-  "orderBy": "createdAt",   // Optional: "createdAt" | "amount"
-  "page": 1,                // Optional: defaults to 1
-  "limit": 10               // Optional: defaults to 10
-}
-```
-
-#### Réponse
-
-```json
-{
-  "success": true,
-  "data": {
-    "transactions": [
-      {
-        "id": "txn_123",
-        "type": "DEBIT",
-        "amount": 50,
-        "description": "Campagne SMS - 100 messages",
-        "createdAt": "2024-03-20T10:00:00Z",
-        "campaignId": "camp_123"
-      }
-    ],
-    "pagination": {
-      "total": 100,
-      "page": 1,
-      "limit": 10,
-      "pages": 10
-    }
-  },
+  "data": 2, // 2 est le solde en crédits
   "error": null
 }
 ```
 
 <Callout type="info">
-  Toutes les réponses de l'API suivent le format standard : `{ success: boolean, data: any, error: any }`.
+  Toutes les réponses de l'API suivent le format standard : `{ success: boolean, data: number, error: any }`.
   Le champ `data` contient les données de la réponse, tandis que `error` contient les détails en cas d'erreur.
 </Callout>
 
@@ -120,89 +76,15 @@ Récupère le solde actuel de crédits.
     </Table.Tr>
   </tbody>
 </Table>
-
-### POST /v1/credit/transactions
-
-Récupère la liste des transactions avec pagination et tri.
-
-<Table style={{ marginTop: 20 }}>
-  <thead>
-    <Table.Tr>
-      <Table.Th>Nom</Table.Th>
-      <Table.Th>Description</Table.Th>
-      <Table.Th>Type</Table.Th>
-      <Table.Th>Facultatif</Table.Th>
-      <Table.Th>Valeur par défaut</Table.Th>
-    </Table.Tr>
-  </thead>
-  <tbody>
-    <Table.Tr>
-      <Table.Td>apiKey</Table.Td>
-      <Table.Td>Clé API</Table.Td>
-      <Table.Td>String</Table.Td>
-      <Table.Td>Non</Table.Td>
-      <Table.Td>-</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>orderBy</Table.Td>
-      <Table.Td>Champ de tri</Table.Td>
-      <Table.Td>"createdAt" | "amount"</Table.Td>
-      <Table.Td>Oui</Table.Td>
-      <Table.Td>createdAt</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>page</Table.Td>
-      <Table.Td>Numéro de page</Table.Td>
-      <Table.Td>Number</Table.Td>
-      <Table.Td>Oui</Table.Td>
-      <Table.Td>1</Table.Td>
-    </Table.Tr>
-    <Table.Tr>
-      <Table.Td>limit</Table.Td>
-      <Table.Td>Nombre d'éléments par page</Table.Td>
-      <Table.Td>Number</Table.Td>
-      <Table.Td>Oui</Table.Td>
-      <Table.Td>10</Table.Td>
-    </Table.Tr>
-  </tbody>
-</Table>
-
-### Structure des transactions
-
-```json
-{
-  "id": "string",          // Identifiant unique de la transaction
-  "type": "string",        // Type de transaction: "CREDIT" | "DEBIT"
-  "amount": number,        // Montant de la transaction
-  "description": "string", // Description de la transaction
-  "createdAt": "string",   // Date de création (ISO 8601)
-  "campaignId": "string"   // ID de la campagne associée (pour les débits)
-}
-```
-
-### Exemple d'erreur
-
-```json
-{
-  "success": false,
-  "data": null,
-  "error": {
-    "code": "INVALID_API_KEY",
-    "message": "Clé API invalide ou expirée"
-  }
-}
-```
-
 ## Bonnes pratiques
 
 1. **Surveillance** : Vérifiez régulièrement votre solde
 2. **Alertes** : Configurez des alertes de solde bas
-3. **Suivi** : Consultez régulièrement vos transactions
-4. **Budget** : Définissez un budget mensuel
-5. **Analyse** : Analysez vos dépenses par campagne
-6. **Optimisation** : Optimisez vos envois pour réduire les coûts
-7. **Facturation** : Gardez une trace des factures
-8. **Rapports** : Générez des rapports financiers réguliers
+3. **Budget** : Définissez un budget mensuel
+4. **Analyse** : Analysez vos dépenses par campagne
+5. **Optimisation** : Optimisez vos envois pour réduire les coûts
+6. **Facturation** : Gardez une trace des factures
+7. **Rapports** : Générez des rapports financiers réguliers
 
 ## Cas d'utilisation
 
@@ -210,7 +92,6 @@ Récupère la liste des transactions avec pagination et tri.
 - Gestion budgétaire
 - Facturation clients
 - Rapports financiers
-- Audit des transactions
 - Optimisation des coûts
 - Planification budgétaire
 
@@ -218,19 +99,11 @@ Récupère la liste des transactions avec pagination et tri.
 
 ### Comment consulter mon solde ?
 
-Utilisez l'endpoint `/v1/credit/balance` pour obtenir votre solde actuel.
-
-### Comment suivre mes transactions ?
-
-Utilisez l'endpoint `/v1/credit/transactions` pour obtenir la liste de vos transactions.
+Utilisez l'endpoint `/v1/user/credit` pour obtenir votre solde actuel.
 
 ### Comment sont facturés les SMS ?
 
 Les SMS sont facturés selon le type de message et le nombre de segments.
-
-### Puis-je obtenir un historique détaillé ?
-
-Oui, l'endpoint `/v1/credit/transactions` vous permet d'obtenir un historique complet.
 
 ### Comment recharger mes crédits ?
 
