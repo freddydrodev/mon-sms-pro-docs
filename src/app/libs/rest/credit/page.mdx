@@ -6,6 +6,7 @@ keywords: crédits SMS, API REST crédits, solde SMS, API SMS, endpoints crédit
 ---
 
 import { Callout, Table } from "nextra/components";
+import SwaggerUI from "@/components/SwaggerUI";
 
 # Gestion des Crédits
 
@@ -112,3 +113,96 @@ Les recharges se font via votre compte Mon SMS PRO ou en contactant notre servic
 ### Comment optimiser mes coûts ?
 
 Utilisez des messages courts, évitez les caractères spéciaux et optimisez vos campagnes.
+
+## Référence API Interactive
+
+<SwaggerUI
+  spec={{
+    openapi: "3.0.0",
+    info: {
+      title: "API Crédits",
+      version: "1.0.0",
+      description:
+        "Gestion des crédits - Consultation du solde et suivi des transactions",
+    },
+    servers: [
+      {
+        url: "https://rest.monsms.pro/v1",
+        description: "Serveur de production",
+      },
+    ],
+    paths: {
+      "/user/credit": {
+        post: {
+          summary: "Consulter le solde de crédits",
+          description: "Récupère le solde actuel de crédits de l'utilisateur",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                  },
+                  required: ["apiKey"],
+                },
+                examples: {
+                  "Consultation solde": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Solde récupéré avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "number",
+                        description: "Solde en crédits",
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                  examples: {
+                    "Solde positif": {
+                      value: {
+                        success: true,
+                        data: 2,
+                        error: null,
+                      },
+                    },
+                    "Solde nul": {
+                      value: {
+                        success: true,
+                        data: 0,
+                        error: null,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  }}
+/>

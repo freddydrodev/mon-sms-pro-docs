@@ -6,6 +6,7 @@ keywords: expéditeurs SMS, API REST expéditeurs, sender ID, API SMS, endpoints
 ---
 
 import { Callout, Table } from "nextra/components";
+import SwaggerUI from "@/components/SwaggerUI";
 
 # Gestion des Expéditeurs
 
@@ -311,3 +312,358 @@ Le nombre d'expéditeurs dépend de votre forfait. Contactez-nous pour plus d'in
 ### Comment modifier un expéditeur ?
 
 Les expéditeurs ne peuvent pas être modifiés une fois créés. Créez-en un nouveau si nécessaire.
+
+## Référence API Interactive
+
+<SwaggerUI
+  spec={{
+    openapi: "3.0.0",
+    info: {
+      title: "API Expéditeurs",
+      version: "1.0.0",
+      description:
+        "Gestion des expéditeurs (Sender ID) - Création, listing et gestion des identifiants d'expéditeur",
+    },
+    servers: [
+      {
+        url: "https://rest.monsms.pro/v1",
+        description: "Serveur de production",
+      },
+    ],
+    paths: {
+      "/sender/create": {
+        post: {
+          summary: "Créer un expéditeur",
+          description:
+            "Crée un nouvel expéditeur avec les paramètres spécifiés",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    name: {
+                      type: "string",
+                      minLength: 3,
+                      maxLength: 11,
+                      description:
+                        "Nom de l'expéditeur (3-11 caractères alphanumériques)",
+                    },
+                    description: {
+                      type: "string",
+                      description: "Description de l'expéditeur",
+                    },
+                  },
+                  required: ["apiKey", "name", "description"],
+                },
+                examples: {
+                  "Création expéditeur": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      name: "MySender",
+                      description:
+                        "My custom sender ID for marketing campaigns",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Expéditeur créé avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            type: "string",
+                          },
+                          name: {
+                            type: "string",
+                          },
+                          description: {
+                            type: "string",
+                          },
+                          status: {
+                            type: "string",
+                            enum: [
+                              "PENDING",
+                              "SUBMITED",
+                              "ACCEPTED",
+                              "REFUSED",
+                            ],
+                          },
+                          createdAt: {
+                            type: "string",
+                            format: "date-time",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                  examples: {
+                    "Réponse succès": {
+                      value: {
+                        success: true,
+                        data: {
+                          id: "6828f5f79df4397112837d22",
+                          name: "MySender",
+                          description:
+                            "My custom sender ID for marketing campaigns",
+                          status: "PENDING",
+                          createdAt: "2025-05-17T20:47:51.320Z",
+                        },
+                        error: null,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/sender/list": {
+        post: {
+          summary: "Lister les expéditeurs",
+          description:
+            "Récupère la liste des expéditeurs avec pagination et tri",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    sort: {
+                      type: "string",
+                      enum: ["asc", "desc"],
+                      default: "desc",
+                      description: "Ordre de tri",
+                    },
+                    orderBy: {
+                      type: "string",
+                      enum: ["name", "createdAt"],
+                      default: "createdAt",
+                      description: "Champ de tri",
+                    },
+                    count: {
+                      type: "number",
+                      default: 10,
+                      description: "Nombre d'éléments par page",
+                    },
+                    page: {
+                      type: "number",
+                      default: 1,
+                      description: "Numéro de page",
+                    },
+                  },
+                  required: ["apiKey"],
+                },
+                examples: {
+                  "Liste simple": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                    },
+                  },
+                  "Liste avec pagination": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      sort: "asc",
+                      orderBy: "name",
+                      count: 10,
+                      page: 1,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Liste des expéditeurs récupérée",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            id: {
+                              type: "string",
+                            },
+                            name: {
+                              type: "string",
+                            },
+                            description: {
+                              type: "string",
+                            },
+                            status: {
+                              type: "string",
+                              enum: [
+                                "PENDING",
+                                "SUBMITED",
+                                "ACCEPTED",
+                                "REFUSED",
+                              ],
+                            },
+                            createdAt: {
+                              type: "string",
+                              format: "date-time",
+                            },
+                          },
+                        },
+                      },
+                      totalCount: {
+                        type: "number",
+                      },
+                      count: {
+                        type: "number",
+                      },
+                      page: {
+                        type: "number",
+                      },
+                      totalPage: {
+                        type: "number",
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                  examples: {
+                    "Liste avec données": {
+                      value: {
+                        success: true,
+                        data: [
+                          {
+                            id: "6828f5f79df4397112837d22",
+                            name: "MySender",
+                            description:
+                              "My custom sender ID for marketing campaigns",
+                            status: "PENDING",
+                            createdAt: "2025-05-17T20:47:51.320Z",
+                          },
+                        ],
+                        totalCount: 1,
+                        count: 1,
+                        page: 1,
+                        totalPage: 1,
+                        error: null,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/sender/{id}/campaign": {
+        post: {
+          summary: "Lister les campagnes d'un expéditeur",
+          description:
+            "Récupère la liste des campagnes associées à un expéditeur",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              description: "ID de l'expéditeur",
+              schema: {
+                type: "string",
+              },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                  },
+                  required: ["apiKey"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Liste des campagnes récupérée",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "array",
+                        description: "Liste des campagnes",
+                      },
+                      totalCount: {
+                        type: "number",
+                      },
+                      count: {
+                        type: "number",
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                  examples: {
+                    "Liste vide": {
+                      value: {
+                        success: true,
+                        data: [],
+                        totalCount: 0,
+                        count: 0,
+                        error: null,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  }}
+/>

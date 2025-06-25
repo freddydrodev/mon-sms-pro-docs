@@ -6,6 +6,7 @@ keywords: API REST SMS, guide démarrage, documentation API, envoi SMS, configur
 ---
 
 import { Callout, Table } from "nextra/components";
+import SwaggerUI from "@/components/SwaggerUI";
 
 # Guide de Démarrage
 
@@ -179,3 +180,308 @@ Utilisez l'endpoint `/v1/campaign/list` pour suivre vos campagnes.
 ### Comment mettre à jour ma clé API ?
 
 Vous pouvez générer une nouvelle clé API à tout moment depuis votre compte.
+
+## Référence API Interactive
+
+<SwaggerUI
+  spec={{
+    openapi: "3.0.0",
+    info: {
+      title: "API REST Mon SMS PRO",
+      version: "1.0.0",
+      description:
+        "Guide de démarrage - Endpoints de base pour commencer avec l'API SMS",
+    },
+    servers: [
+      {
+        url: "https://rest.monsms.pro/v1",
+        description: "Serveur de production",
+      },
+    ],
+    components: {
+      securitySchemes: {
+        apiKey: {
+          type: "apiKey",
+          name: "apiKey",
+          in: "body",
+          description:
+            "Clé API d'authentification (incluse dans le corps de la requête)",
+        },
+      },
+    },
+    security: [
+      {
+        apiKey: [],
+      },
+    ],
+    paths: {
+      "/campaign/create": {
+        post: {
+          summary: "Envoyer un SMS simple",
+          description: "Exemple de base pour envoyer votre premier SMS",
+          tags: ["Démarrage"],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    contacts: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          phone: {
+                            type: "string",
+                            description:
+                              "Numéro de téléphone avec indicatif pays (sans +)",
+                          },
+                        },
+                        required: ["phone"],
+                      },
+                      description: "Liste des contacts destinataires",
+                    },
+                    text: {
+                      type: "string",
+                      description: "Contenu du message SMS",
+                    },
+                    type: {
+                      type: "string",
+                      enum: ["SMS"],
+                      default: "SMS",
+                      description: "Type de message",
+                    },
+                  },
+                  required: ["apiKey", "contacts", "text"],
+                },
+                examples: {
+                  "Premier SMS": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      contacts: [
+                        {
+                          phone: "22500000000",
+                        },
+                      ],
+                      text: "Bonjour ! Ceci est mon premier message via l'API REST Mon SMS PRO.",
+                      type: "SMS",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "SMS envoyé avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            type: "string",
+                          },
+                          status: {
+                            type: "string",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/contact/create": {
+        post: {
+          summary: "Créer un contact",
+          description: "Exemple de création d'un contact",
+          tags: ["Démarrage"],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    phone: {
+                      type: "string",
+                      description:
+                        "Numéro de téléphone avec indicatif pays (sans +)",
+                    },
+                  },
+                  required: ["apiKey", "phone"],
+                },
+                examples: {
+                  "Création contact": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      phone: "22500000000",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Contact créé avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            type: "string",
+                          },
+                          phone: {
+                            type: "string",
+                          },
+                          createdAt: {
+                            type: "string",
+                            format: "date-time",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/group/create": {
+        post: {
+          summary: "Créer un groupe",
+          description: "Exemple de création d'un groupe de contacts",
+          tags: ["Démarrage"],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    name: {
+                      type: "string",
+                      description: "Nom du groupe",
+                    },
+                    description: {
+                      type: "string",
+                      description: "Description du groupe",
+                    },
+                    contacts: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          phone: {
+                            type: "string",
+                            description:
+                              "Numéro de téléphone avec indicatif pays (sans +)",
+                          },
+                        },
+                        required: ["phone"],
+                      },
+                      description: "Liste des contacts à ajouter au groupe",
+                    },
+                  },
+                  required: ["apiKey", "name"],
+                },
+                examples: {
+                  "Création groupe": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      name: "Mes Contacts",
+                      description: "Groupe de contacts principaux",
+                      contacts: [
+                        {
+                          phone: "22500000000",
+                        },
+                        {
+                          phone: "22500000001",
+                        },
+                      ],
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Groupe créé avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            type: "string",
+                          },
+                          name: {
+                            type: "string",
+                          },
+                          description: {
+                            type: "string",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  }}
+/>

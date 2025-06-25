@@ -6,6 +6,7 @@ keywords: API REST groupes SMS, gestion groupes contacts, API SMS groupes, créa
 ---
 
 import { Callout, Table } from "nextra/components";
+import SwaggerUI from "@/components/SwaggerUI";
 
 # Gestion des Groupes de Contacts SMS
 
@@ -384,3 +385,411 @@ Oui, vous pouvez créer des groupes vides et ajouter des contacts plus tard via 
 ### Y a-t-il une limite au nombre de contacts par groupe ?
 
 Non, vous pouvez ajouter autant de contacts que nécessaire dans un groupe.
+
+## Référence API Interactive
+
+<SwaggerUI
+  spec={{
+    openapi: "3.0.0",
+    info: {
+      title: "API Groupes",
+      version: "1.0.0",
+      description:
+        "Gestion des groupes de contacts - Création, modification, suppression et organisation des groupes",
+    },
+    servers: [
+      {
+        url: "https://rest.monsms.pro/v1",
+        description: "Serveur de production",
+      },
+    ],
+    paths: {
+      "/group/create": {
+        post: {
+          summary: "Créer un nouveau groupe",
+          description: "Crée un nouveau groupe avec les contacts spécifiés",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    name: {
+                      type: "string",
+                      description: "Nom du groupe",
+                    },
+                    description: {
+                      type: "string",
+                      description: "Description du groupe",
+                    },
+                    contactIds: {
+                      type: "array",
+                      items: {
+                        type: "string",
+                      },
+                      description:
+                        "Liste des IDs des contacts à ajouter au groupe",
+                    },
+                  },
+                  required: ["apiKey", "name"],
+                },
+                examples: {
+                  "Création groupe simple": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      name: "Clients Premium",
+                      description: "Groupe des clients premium",
+                    },
+                  },
+                  "Création groupe avec contacts": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      name: "Clients Premium",
+                      description: "Groupe des clients premium",
+                      contactIds: ["id_contact_1", "id_contact_2"],
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Groupe créé avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            type: "string",
+                          },
+                          name: {
+                            type: "string",
+                          },
+                          description: {
+                            type: "string",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/group/list": {
+        post: {
+          summary: "Lister tous les groupes",
+          description: "Récupère la liste des groupes avec pagination",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                  },
+                  required: ["apiKey"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Liste des groupes récupérée",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            id: {
+                              type: "string",
+                            },
+                            name: {
+                              type: "string",
+                            },
+                            description: {
+                              type: "string",
+                            },
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/group/{id}": {
+        post: {
+          summary: "Obtenir les détails d'un groupe",
+          description:
+            "Récupère les informations détaillées d'un groupe par son ID",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              description: "ID du groupe",
+              schema: {
+                type: "string",
+              },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                  },
+                  required: ["apiKey"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Détails du groupe récupérés",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            type: "string",
+                          },
+                          name: {
+                            type: "string",
+                          },
+                          description: {
+                            type: "string",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/group/{id}/update": {
+        post: {
+          summary: "Modifier un groupe",
+          description: "Met à jour les informations d'un groupe existant",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              description: "ID du groupe",
+              schema: {
+                type: "string",
+              },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    name: {
+                      type: "string",
+                      description: "Nouveau nom du groupe",
+                    },
+                    description: {
+                      type: "string",
+                      description: "Nouvelle description du groupe",
+                    },
+                    contactIds: {
+                      type: "array",
+                      items: {
+                        type: "string",
+                      },
+                      description:
+                        "Liste des IDs des contacts à ajouter au groupe",
+                    },
+                  },
+                  required: ["apiKey"],
+                },
+                examples: {
+                  "Modification nom": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      name: "Nouveau nom du groupe",
+                    },
+                  },
+                  "Modification complète": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      name: "Nouveau nom du groupe",
+                      description: "Nouvelle description du groupe",
+                      contactIds: ["id_contact_1", "id_contact_2"],
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Groupe modifié avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            type: "string",
+                          },
+                          name: {
+                            type: "string",
+                          },
+                          description: {
+                            type: "string",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/group/{id}/delete": {
+        post: {
+          summary: "Supprimer un groupe",
+          description: "Supprime un groupe par son ID",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              description: "ID du groupe",
+              schema: {
+                type: "string",
+              },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                  },
+                  required: ["apiKey"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Groupe supprimé avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          count: {
+                            type: "number",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  }}
+/>

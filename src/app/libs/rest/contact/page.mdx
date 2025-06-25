@@ -6,6 +6,7 @@ keywords: contacts SMS, API REST contacts, gestion contacts, API SMS, endpoints 
 ---
 
 import { Callout, Table } from "nextra/components";
+import SwaggerUI from "@/components/SwaggerUI";
 
 # Gestion des Contacts
 
@@ -510,3 +511,506 @@ Utilisez l'endpoint `/v1/contact/delete` avec l'ID du contact à supprimer.
 ### Comment récupérer les détails d'un contact ?
 
 Utilisez l'endpoint `/v1/contact/[id]` avec l'ID du contact pour obtenir ses informations complètes, y compris tous les champs personnels.
+
+## Référence API Interactive
+
+<SwaggerUI
+  spec={{
+    openapi: "3.0.0",
+    info: {
+      title: "API Contacts",
+      version: "1.0.0",
+      description:
+        "Gestion des contacts - Création, listing, modification et suppression de contacts",
+    },
+    servers: [
+      {
+        url: "https://rest.monsms.pro/v1",
+        description: "Serveur de production",
+      },
+    ],
+    paths: {
+      "/contact/create": {
+        post: {
+          summary: "Créer un ou plusieurs contacts",
+          description:
+            "Crée un ou plusieurs contacts avec leurs informations personnelles",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    contacts: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          name: {
+                            type: "string",
+                            description: "Nom complet du contact",
+                          },
+                          phone: {
+                            type: "string",
+                            description:
+                              "Numéro de téléphone avec indicatif pays (sans +)",
+                          },
+                          sex: {
+                            type: "string",
+                            enum: ["M", "F"],
+                            description: "Sexe du contact",
+                          },
+                        },
+                        required: ["phone"],
+                      },
+                      description: "Liste des contacts à créer",
+                    },
+                  },
+                  required: ["apiKey", "contacts"],
+                },
+                examples: {
+                  "Création simple": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      contacts: [
+                        {
+                          phone: "2250708517414",
+                        },
+                      ],
+                    },
+                  },
+                  "Création avec informations": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      contacts: [
+                        {
+                          name: "Freddy Dro",
+                          phone: "2250708517414",
+                          sex: "M",
+                        },
+                      ],
+                    },
+                  },
+                  "Création multiple": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      contacts: [
+                        {
+                          name: "Freddy Dro",
+                          phone: "2250708517414",
+                          sex: "M",
+                        },
+                        {
+                          phone: "2250505050505",
+                        },
+                      ],
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Contacts créés avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            id: {
+                              type: "string",
+                            },
+                            name: {
+                              type: "string",
+                              nullable: true,
+                            },
+                            firstName: {
+                              type: "string",
+                              nullable: true,
+                            },
+                            lastName: {
+                              type: "string",
+                              nullable: true,
+                            },
+                            phone: {
+                              type: "string",
+                            },
+                            sex: {
+                              type: "string",
+                              nullable: true,
+                            },
+                            createdAt: {
+                              type: "string",
+                              format: "date-time",
+                            },
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/contact/list": {
+        post: {
+          summary: "Lister tous les contacts",
+          description: "Récupère la liste des contacts avec pagination",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                  },
+                  required: ["apiKey"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Liste des contacts récupérée",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "array",
+                        items: {
+                          type: "object",
+                          properties: {
+                            id: {
+                              type: "string",
+                            },
+                            name: {
+                              type: "string",
+                              nullable: true,
+                            },
+                            firstName: {
+                              type: "string",
+                              nullable: true,
+                            },
+                            lastName: {
+                              type: "string",
+                              nullable: true,
+                            },
+                            phone: {
+                              type: "string",
+                            },
+                            sex: {
+                              type: "string",
+                              nullable: true,
+                            },
+                            createdAt: {
+                              type: "string",
+                              format: "date-time",
+                            },
+                          },
+                        },
+                      },
+                      totalCount: {
+                        type: "number",
+                      },
+                      count: {
+                        type: "number",
+                      },
+                      page: {
+                        type: "number",
+                      },
+                      totalPage: {
+                        type: "number",
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/contact/{id}": {
+        post: {
+          summary: "Obtenir les détails d'un contact",
+          description:
+            "Récupère les informations détaillées d'un contact par son ID",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              description: "ID du contact",
+              schema: {
+                type: "string",
+              },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    id: {
+                      type: "string",
+                      description: "ID du contact",
+                    },
+                  },
+                  required: ["apiKey", "id"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Détails du contact récupérés",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            type: "string",
+                          },
+                          name: {
+                            type: "string",
+                            nullable: true,
+                          },
+                          firstName: {
+                            type: "string",
+                            nullable: true,
+                          },
+                          lastName: {
+                            type: "string",
+                            nullable: true,
+                          },
+                          phone: {
+                            type: "string",
+                          },
+                          sex: {
+                            type: "string",
+                            nullable: true,
+                          },
+                          createdAt: {
+                            type: "string",
+                            format: "date-time",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/contact/{id}/update": {
+        post: {
+          summary: "Modifier un contact",
+          description: "Met à jour les informations d'un contact existant",
+          parameters: [
+            {
+              name: "id",
+              in: "path",
+              required: true,
+              description: "ID du contact",
+              schema: {
+                type: "string",
+              },
+            },
+          ],
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    firstName: {
+                      type: "string",
+                      description: "Prénom du contact",
+                    },
+                    lastName: {
+                      type: "string",
+                      description: "Nom de famille du contact",
+                    },
+                    sex: {
+                      type: "string",
+                      enum: ["M", "F"],
+                      description: "Sexe du contact",
+                    },
+                  },
+                  required: ["apiKey"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Contact modifié avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          id: {
+                            type: "string",
+                          },
+                          name: {
+                            type: "string",
+                            nullable: true,
+                          },
+                          firstName: {
+                            type: "string",
+                            nullable: true,
+                          },
+                          lastName: {
+                            type: "string",
+                            nullable: true,
+                          },
+                          phone: {
+                            type: "string",
+                          },
+                          sex: {
+                            type: "string",
+                            nullable: true,
+                          },
+                          updatedAt: {
+                            type: "string",
+                            format: "date-time",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/contact/delete": {
+        post: {
+          summary: "Supprimer un ou plusieurs contacts",
+          description: "Supprime un ou plusieurs contacts par leurs IDs",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    contactsIds: {
+                      type: "array",
+                      items: {
+                        type: "string",
+                      },
+                      description: "Liste des IDs des contacts à supprimer",
+                    },
+                  },
+                  required: ["apiKey", "contactsIds"],
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "Contacts supprimés avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          count: {
+                            type: "number",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  }}
+/>

@@ -6,6 +6,7 @@ keywords: OTP SMS, API REST OTP, vérification SMS, API SMS, endpoints OTP, séc
 ---
 
 import { Callout, Table } from "nextra/components";
+import SwaggerUI from "@/components/SwaggerUI";
 
 # Gestion des OTP
 
@@ -257,3 +258,240 @@ Non, chaque code OTP est à usage unique et ne peut être utilisé qu'une seule 
 ### Comment personnaliser l'expéditeur ?
 
 Utilisez le paramètre `senderId` pour spécifier un expéditeur personnalisé.
+
+## Référence API Interactive
+
+<SwaggerUI
+  spec={{
+    openapi: "3.0.0",
+    info: {
+      title: "API OTP",
+      version: "1.0.0",
+      description:
+        "Gestion des OTP - Envoi et vérification de codes de sécurité par SMS",
+    },
+    servers: [
+      {
+        url: "https://rest.monsms.pro/v1",
+        description: "Serveur de production",
+      },
+    ],
+    paths: {
+      "/auth/otp/get": {
+        post: {
+          summary: "Envoyer un code OTP",
+          description: "Envoie un code OTP au numéro de téléphone spécifié",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    phoneNumber: {
+                      type: "string",
+                      description:
+                        "Numéro de téléphone avec indicatif pays (avec +)",
+                    },
+                    length: {
+                      type: "number",
+                      default: 4,
+                      description: "Longueur du code OTP",
+                    },
+                    mode: {
+                      type: "string",
+                      enum: ["NUMERIC", "ALPHABET", "ALPHA_NUMERIC"],
+                      default: "NUMERIC",
+                      description: "Mode du code OTP",
+                    },
+                    senderId: {
+                      type: "string",
+                      default: "MONSMSPRO",
+                      description:
+                        "Identifiant de l'expéditeur (doit être enregistré et actif)",
+                    },
+                    appName: {
+                      type: "string",
+                      description: "Nom de l'application",
+                    },
+                  },
+                  required: ["apiKey", "phoneNumber"],
+                },
+                examples: {
+                  "OTP simple": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      phoneNumber: "+2250708517414",
+                    },
+                  },
+                  "OTP personnalisé": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      phoneNumber: "+2250708517414",
+                      length: 10,
+                      mode: "ALPHA_NUMERIC",
+                      senderId: "Boss",
+                      appName: "My APP",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "OTP envoyé avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          token: {
+                            type: "string",
+                            description: "Token pour la vérification",
+                          },
+                          status: {
+                            type: "string",
+                            enum: ["PENDING"],
+                          },
+                          phoneNumber: {
+                            type: "string",
+                            description: "Numéro de téléphone (sans +)",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                  examples: {
+                    "Réponse succès": {
+                      value: {
+                        success: true,
+                        data: {
+                          token: "6828f2299df4397112837d20",
+                          status: "PENDING",
+                          phoneNumber: "2250708517414",
+                        },
+                        error: null,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      "/auth/otp/verify": {
+        post: {
+          summary: "Vérifier un code OTP",
+          description: "Vérifie un code OTP pour un numéro de téléphone",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    apiKey: {
+                      type: "string",
+                      description: "Clé API d'authentification",
+                    },
+                    phoneNumber: {
+                      type: "string",
+                      description:
+                        "Numéro de téléphone avec indicatif pays (sans +)",
+                    },
+                    token: {
+                      type: "string",
+                      description: "Token reçu lors de la génération de l'OTP",
+                    },
+                    otp: {
+                      type: "string",
+                      description: "Code OTP à vérifier",
+                    },
+                  },
+                  required: ["apiKey", "phoneNumber", "token", "otp"],
+                },
+                examples: {
+                  "Vérification OTP": {
+                    value: {
+                      apiKey: "YOUR_API_KEY",
+                      phoneNumber: "2250708517414",
+                      token: "6828f2299df4397112837d20",
+                      otp: "5ZAEZ0Z8G5A",
+                    },
+                  },
+                },
+              },
+            },
+          },
+          responses: {
+            "200": {
+              description: "OTP vérifié avec succès",
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      success: {
+                        type: "boolean",
+                      },
+                      data: {
+                        type: "object",
+                        properties: {
+                          token: {
+                            type: "string",
+                            description: "Token de l'OTP",
+                          },
+                          status: {
+                            type: "string",
+                            enum: ["VERIFIED"],
+                          },
+                          phoneNumber: {
+                            type: "string",
+                            description: "Numéro de téléphone vérifié",
+                          },
+                        },
+                      },
+                      error: {
+                        type: "object",
+                        nullable: true,
+                      },
+                    },
+                  },
+                  examples: {
+                    "Vérification réussie": {
+                      value: {
+                        success: true,
+                        data: {
+                          token: "6828f2299df4397112837d20",
+                          status: "VERIFIED",
+                          phoneNumber: "2250708517414",
+                        },
+                        error: null,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  }}
+/>
